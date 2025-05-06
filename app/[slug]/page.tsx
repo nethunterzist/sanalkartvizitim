@@ -294,6 +294,31 @@ export default async function SlugPage({ params }: { params: { slug: string } })
       const missingBankImagesRegex = /src="\/img\/banks\/([^"]+)"/g
       htmlContent = htmlContent.replace(missingBankImagesRegex, 'src="/img/banks/ziraat.png" onerror="this.src=\'/img/iban.png\'"')
       
+      // QR kodu URL'sini güncelle - Eski: /[slug]/qr, Yeni: /api/qr-codes/[slug]
+      const qrCodeUrl = `/api/qr-codes/${slug}`;
+
+      // HTML içine QR kodu bağlantısını ekleyen fonksiyon
+      const addQrCodeLink = (html: string) => {
+        // QR kod bağlantısını ekle
+        const qrButtonHtml = `
+        <div class="row justify-content-center mt-4 mb-4">
+          <div class="col-12 text-center">
+            <a href="${qrCodeUrl}" target="_blank" class="btn btn-primary">
+              <i class="fas fa-qrcode me-2"></i>QR Kodunu Görüntüle
+            </a>
+          </div>
+        </div>`;
+
+        // HTML içinde uygun bir yere ekle
+        return html.replace(
+          /<div class="container"[^>]*id="top-container"[^>]*>/, 
+          `<div class="container" id="top-container">${qrButtonHtml}`
+        );
+      };
+      
+      // HTML'e QR kodu bağlantısını ekle
+      htmlContent = addQrCodeLink(htmlContent);
+      
       // Görüntülenme sayısını artır
       try {
         await prisma.firmalar.update({

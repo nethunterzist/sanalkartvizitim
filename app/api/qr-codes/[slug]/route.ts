@@ -3,7 +3,7 @@ import path from 'path';
 import Handlebars from 'handlebars';
 import fs from 'fs';
 import { PrismaClient } from '@prisma/client';
-import { generateQRCode } from '../../../lib/qrCodeGenerator';
+import { generateQRCode } from '../../../../lib/qrCodeGenerator';
 
 const prisma = new PrismaClient();
 
