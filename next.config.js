@@ -18,6 +18,18 @@ const nextConfig = {
         destination: '/api/qr-codes/:slug',
         permanent: true,
       },
+      {
+        source: '/api/auth/:path*',
+        has: [
+          {
+            type: 'header',
+            key: 'x-use-pages',
+            value: 'true',
+          },
+        ],
+        destination: '/api/auth/:path*',
+        permanent: false,
+      }
     ]
   },
   // VCF dosyalarının doğru MIME tipi ile sunulması için
