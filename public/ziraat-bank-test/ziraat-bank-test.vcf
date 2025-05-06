@@ -1,0 +1,12 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Yılmaz;Ahmet;;;;
+FN:Ahmet Yılmaz
+ORG:Ziraat Bank Test
+TITLE:Banka Müdürü
+TEL;TYPE=WORK,VOICE:+905501234567
+TEL;TYPE=WORK,VOICE:+905507654321
+EMAIL;TYPE=WORK:info@ziraat-bank-test.com
+EMAIL;TYPE=WORK:destek@ziraat-bank-test.com
+URL:https://www.ziraat-bank-test.com
+END:VCARD
