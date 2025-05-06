@@ -65,3 +65,7 @@ Detaylı bilgi için GELISTIRME_GUNLUGU.md dosyasını inceleyebilirsiniz.
 ## Lisans
 
 MIT Lisansı altında dağıtılmaktadır. Detaylı bilgi için `LICENSE` dosyasını inceleyiniz.
+
+## Veritabanı
+
+Proje Supabase PostgreSQL veritabanı kullanmaktadır. Veritabanı entegrasyonu tamamlanmıştır.
