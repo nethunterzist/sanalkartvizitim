@@ -1,0 +1,22 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Ege Nakliyat
+TEL;TYPE=WORK,VOICE:05402202165
+TEL;TYPE=WORK,VOICE:05509790436
+EMAIL;TYPE=WORK:info@egenakliyat.com
+EMAIL;TYPE=WORK:destek@egenakliyat.com
+X-SOCIALPROFILE;TYPE=telegram;x-user=egenakliyat:https://t.me/egenakliyat
+X-SOCIALPROFILE;TYPE=telegram;x-user=egenakliyat_official:https://t.me/egenakliyat_official
+X-SOCIALPROFILE;TYPE=instagram;x-user=egenakliyat:https://www.instagram.com/egenakliyat/
+X-SOCIALPROFILE;TYPE=instagram;x-user=egenakliyat_official:https://www.instagram.com/egenakliyat_official/
+X-SOCIALPROFILE;TYPE=youtube;x-user=egenakliyat:egenakliyat
+X-SOCIALPROFILE;TYPE=youtube;x-user=egenakliyatTV:egenakliyatTV
+X-SOCIALPROFILE;TYPE=linkedin;x-user=egenakliyat:egenakliyat
+X-SOCIALPROFILE;TYPE=linkedin;x-user=egenakliyat-group:egenakliyat-group
+X-SOCIALPROFILE;TYPE=twitter;x-user=egenakliyat:https://twitter.com/egenakliyat
+X-SOCIALPROFILE;TYPE=twitter;x-user=egenakliyat_tr:https://twitter.com/egenakliyat_tr
+X-SOCIALPROFILE;TYPE=facebook;x-user=egenakliyat:egenakliyat
+X-SOCIALPROFILE;TYPE=facebook;x-user=egenakliyat.official:egenakliyat.official
+X-SOCIALPROFILE;TYPE=tiktok;x-user=egenakliyat:https://tiktok.com/@egenakliyat
+X-SOCIALPROFILE;TYPE=tiktok;x-user=egenakliyat.official:https://tiktok.com/@egenakliyat.official
+END:VCARD
