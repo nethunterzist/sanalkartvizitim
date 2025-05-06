@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sanal Kartvizit Uygulaması
 
-## Getting Started
+Bu proje, firmalar için dijital kartvizit oluşturmaya olanak tanıyan bir web uygulamasıdır. Firma bilgilerini, iletişim verilerini ve sosyal medya hesaplarını içeren dijital kartvizitler oluşturulabilir ve paylaşılabilir.
 
-First, run the development server:
+## Özellikler
+
+- Firma bilgilerini yönetme (ekleme, düzenleme, silme)
+- Çoklu iletişim verileri desteği (telefon, e-posta, WhatsApp, Telegram)
+- Sosyal medya hesaplarını ekleme
+- vCard dosyaları ile rehbere kaydetme
+- QR kod oluşturma
+- Bank hesapları ve vergi bilgileri ekleme
+- Dijital kartvizitleri görüntüleme ve paylaşma
+- Responsive tasarım
+
+## Teknolojiler
+
+- Next.js 14
+- TypeScript
+- Prisma ORM
+- SQLite
+- Handlebars (şablon motoru)
+- Bootstrap
+- Font Awesome
+
+## Kurulum
 
 ```bash
+# Repoyu klonlayın
+git clone https://github.com/username/sanal-kartvizit.git
+
+# Proje dizinine gidin
+cd sanal-kartvizit
+
+# Bağımlılıkları yükleyin
+npm install
+
+# Geliştirme sunucusunu başlatın
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Son Geliştirmeler
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Telegram Veri İşleme Düzeltmeleri (20.04.2025)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Telegram kullanıcı adlarının işlenmesi ve görüntülenmesiyle ilgili sorunlar giderildi:
 
-## Learn More
+- Telegram kullanıcı adlarında null/undefined değerlere karşı kontroller eklendi
+- `@` işareti ile başlayan kullanıcı adlarının doğru şekilde işlenmesi sağlandı
+- Boş değerlerin ve gereksiz boşlukların filtrelenmesi eklendi
+- HTML çıktısında Telegram bağlantıları artık doğru URL formatında (`https://t.me/username`) oluşturuluyor
 
-To learn more about Next.js, take a look at the following resources:
+Bu değişiklikler sayesinde, uygulama artık çoklu Telegram kullanıcı adlarını güvenli bir şekilde işleyebiliyor ve herhangi bir veri formatı hatası olmadan doğru bağlantıları oluşturabiliyor.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Detaylı bilgi için GELISTIRME_GUNLUGU.md dosyasını inceleyebilirsiniz.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Katkıda Bulunma
 
-## Deploy on Vercel
+1. Projeyi fork edin
+2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
+3. Değişikliklerinizi commit edin (`git commit -m 'Add some amazing feature'`)
+4. Branch'inize push edin (`git push origin feature/amazing-feature`)
+5. Pull Request açın
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Lisans
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT Lisansı altında dağıtılmaktadır. Detaylı bilgi için `LICENSE` dosyasını inceleyiniz.

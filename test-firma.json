@@ -1,0 +1,8 @@
+{
+  "firma_adi": "Test Instagram Firma",
+  "slug": "test-instagram-firma",
+  "telefon": "05551234567",
+  "eposta": "test@example.com",
+  "website": "https://example.com",
+  "social_media_data": {"instagramlar": ["instagram_hesap1", "instagram_hesap2", "instagram_hesap3"], "youtubelar": ["youtube_kanal"], "twitterlar": ["twitter_hesap"]}
+} 

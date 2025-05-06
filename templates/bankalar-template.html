@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{firma_adi}} - Banka Hesap Bilgileri</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            color: #333;
+            padding: 20px 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('/img/back.jpeg') no-repeat center center;
+            background-size: cover;
+            filter: blur(4px);
+            z-index: -1;
+        }
+        .container {
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            color: #000;
+            text-shadow: none;
+        }
+        .bank-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+            border-left: 4px solid #daa520;
+        }
+        .bank-card:hover {
+            transform: translateY(-5px);
+        }
+        .bank-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        .bank-name {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #333;
+            text-align: left;
+            display: block;
+            width: 100%;
+        }
+        .iban-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .currency-badge {
+            background: linear-gradient(135deg, #FFD700, #b8860b);
+            color: white;
+            font-weight: bold;
+            padding: 8px 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+            font-size: 16px;
+            width: 36px;
+            height: 36px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .iban-container {
+            flex: 1;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            border: 1px solid #eee;
+            position: relative;
+        }
+        .account-holder {
+            color: #6c757d;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            text-align: left;
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .copy-account-btn {
+            background: none;
+            border: none;
+            color: #daa520;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 10px;
+            transition: color 0.3s;
+            vertical-align: middle;
+        }
+        
+        .copy-account-btn:hover {
+            color: #c99100;
+        }
+        .copy-btn {
+            background-color: #daa520;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+        }
+        .copy-btn:hover {
+            background-color: #c99100;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            color: #fff;
+            text-decoration: none;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .back-btn:hover {
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.5);
+            text-decoration: none;
+        }
+        .no-accounts {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>{{firma_adi}}</h1>
+            <h2>Banka Hesap Bilgileri</h2>
+        </div>
+        
+        <div class="bank-accounts">
+            {{#if bank_accounts.length}}
+                {{#each bank_accounts}}
+                <div class="bank-card">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center">
+                            <img src="{{this.bank_logo}}" alt="{{this.bank_label}}" class="bank-logo">
+                        </div>
+                        <div class="col-md-9">
+                            <div class="bank-name">{{this.bank_label}}</div>
+                            
+                            <!-- TL Hesabı -->
+                            <div class="iban-info">
+                                <div class="currency-badge">₺</div>
+                                <div class="iban-container" id="iban-{{@index}}">
+                                    {{this.iban}}
+                                    <button class="copy-btn" onclick="copyIban('iban-{{@index}}')">
+                                        <i class="fas fa-copy"></i> Kopyala
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Dolar Hesabı -->
+                            {{#if this.iban_usd}}
+                            <div class="iban-info">
+                                <div class="currency-badge">$</div>
+                                <div class="iban-container" id="iban-usd-{{@index}}">
+                                    {{this.iban_usd}}
+                                    <button class="copy-btn" onclick="copyIban('iban-usd-{{@index}}')">
+                                        <i class="fas fa-copy"></i> Kopyala
+                                    </button>
+                                </div>
+                            </div>
+                            {{/if}}
+                            
+                            <!-- Euro Hesabı -->
+                            {{#if this.iban_eur}}
+                            <div class="iban-info">
+                                <div class="currency-badge">€</div>
+                                <div class="iban-container" id="iban-eur-{{@index}}">
+                                    {{this.iban_eur}}
+                                    <button class="copy-btn" onclick="copyIban('iban-eur-{{@index}}')">
+                                        <i class="fas fa-copy"></i> Kopyala
+                                    </button>
+                                </div>
+                            </div>
+                            {{/if}}
+                            
+                            <div class="account-holder">
+                                <i class="fas fa-user"></i> {{this.account_holder}}
+                                <button class="copy-account-btn" onclick="copyAccountHolder('{{this.account_holder}}')">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            {{else}}
+                <div class="no-accounts">
+                    <i class="fas fa-exclamation-circle fa-3x mb-3" style="color: #daa520;"></i>
+                    <h3>Bu firma için tanımlanmış banka hesabı bulunmamaktadır.</h3>
+                </div>
+            {{/if}}
+        </div>
+        
+        <div class="text-center">
+            <a href="/{{slug}}" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Firma Sayfasına Geri Dön
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function copyIban(elementId) {
+            const ibanElement = document.getElementById(elementId);
+            const ibanText = ibanElement.textContent.trim().split(' Kopyala')[0];
+            
+            navigator.clipboard.writeText(ibanText).then(function() {
+                alert('IBAN başarıyla kopyalandı: ' + ibanText);
+            }, function() {
+                alert('IBAN kopyalanırken bir hata oluştu.');
+            });
+        }
+        
+        function copyAccountHolder(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('Hesap sahibi adı başarıyla kopyalandı: ' + text);
+            }, function() {
+                alert('Hesap sahibi adı kopyalanırken bir hata oluştu.');
+            });
+        }
+    </script>
+</body>
+</html> 

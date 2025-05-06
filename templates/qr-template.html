@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{firma_adi}} - QR Kod</title>
+    <link rel="icon" href="https://sanalkartvizitim.com/wp-content/uploads/2024/03/fav.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-y: auto;
+            background-color: #fff;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .background {
+            background: url('/img/back.jpeg') no-repeat center center;
+            background-size: auto 100%;
+            width: 100%;
+            height: auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .card-content {
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            margin: auto;
+            padding: 20px 0;
+        }
+        .qr-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 30px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .qr-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: white;
+            border: 2px solid rgba(0, 0, 0, 0.05);
+            border-radius: 5px;
+        }
+        .qr-frame {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .name-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .position-title {
+            font-size: 28px;
+            color: #333;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 400;
+        }
+        .company-logo {
+            max-height: 150px;
+            max-width: 100%;
+            margin: 20px auto;
+            display: block;
+        }
+        .website-container {
+            margin-top: 20px;
+        }
+        .website-link {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            font-size: 28px;
+            margin: 5px 0;
+            font-weight: 500;
+        }
+        .website-link:hover {
+            color: #000;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="background">
+        <div class="card-content">
+            {{#if yetkili_adi}}
+            <h1 class="name-title">{{yetkili_adi}}</h1>
+            {{else}}
+            <h1 class="name-title">{{firma_adi}}</h1>
+            {{/if}}
+            
+            <div class="qr-container">
+                <div class="qr-frame"></div>
+                <img src="/qrcodes/{{slug}}.png" alt="QR Kod" class="qr-image">
+            </div>
+            
+            {{#if yetkili_pozisyon}}
+            <div class="position-title">{{yetkili_pozisyon}}</div>
+            {{/if}}
+            
+            {{#if firma_logo}}
+            <img src="{{firma_logo}}" alt="{{firma_adi}} Logo" class="company-logo">
+            {{/if}}
+            
+            {{#if website.length}}
+            <div class="website-container">
+                {{#each website}}
+                <a href="{{this}}" target="_blank" class="website-link">
+                    {{this}}
+                </a>
+                {{/each}}
+            </div>
+            {{/if}}
+        </div>
+    </div>
+</body>
+</html> 

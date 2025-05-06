@@ -1,0 +1,383 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { query, getAllFirmalar } from '@/app/lib/db';
+import { generateHtmlForFirma } from '@/app/lib/htmlGenerator';
+import * as fs from 'fs';
+import * as path from 'path';
+
+export async function GET() {
+  try {
+    const firmalar = await getAllFirmalar();
+    return NextResponse.json({ firmalar });
+  } catch (error) {
+    console.error('Firmalar getirilirken hata oluştu:', error);
+    return NextResponse.json(
+      { error: 'Firmalar getirilirken bir hata oluştu' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    console.log('========= POST İSTEĞİ BAŞLADI =========');
+    console.log('İstek method:', req.method);
+    console.log('İstek URL:', req.url);
+    
+    // FormData'yı manuel olarak işle
+    const formData = await req.formData();
+    console.log('Form verileri alındı, alanlar:', Array.from(formData.keys()));
+    
+    // Form verilerini çıkar
+    const firmaAdi = formData.get('firma_adi') as string || formData.get('firmaAdi') as string;
+    const slug = formData.get('slug') as string;
+    const telefon = formData.get('telefon') as string || null;
+    const eposta = formData.get('eposta') as string || null;
+    const whatsapp = formData.get('whatsapp') as string || null;
+    
+    // Çoklu sosyal medya ve web site alanları
+    const instagramArray: string[] = [];
+    const youtubeArray: string[] = [];
+    const linkedinArray: string[] = [];
+    const twitterArray: string[] = [];
+    const facebookArray: string[] = [];
+    const websiteArray: string[] = [];
+    const haritaArray: string[] = [];
+    
+    // Form verilerinden çoklu sosyal medya hesaplarını topla
+    Array.from(formData.keys()).forEach(key => {
+      if (key.startsWith('instagram_')) {
+        const value = formData.get(key) as string;
+        if (value && value.trim()) {
+          instagramArray.push(value);
+        }
+      } else if (key.startsWith('youtube_')) {
+        const value = formData.get(key) as string;
+        if (value && value.trim()) {
+          youtubeArray.push(value);
+        }
+      } else if (key.startsWith('linkedin_')) {
+        const value = formData.get(key) as string;
+        if (value && value.trim()) {
+          linkedinArray.push(value);
+        }
+      } else if (key.startsWith('twitter_')) {
+        const value = formData.get(key) as string;
+        if (value && value.trim()) {
+          twitterArray.push(value);
+        }
+      } else if (key.startsWith('facebook_')) {
+        const value = formData.get(key) as string;
+        if (value && value.trim()) {
+          facebookArray.push(value);
+        }
+      } else if (key.startsWith('website_')) {
+        const value = formData.get(key) as string;
+        if (value && value.trim()) {
+          websiteArray.push(value);
+        }
+      } else if (key.startsWith('harita_')) {
+        const value = formData.get(key) as string;
+        if (value && value.trim()) {
+          haritaArray.push(value);
+        }
+      }
+    });
+    
+    // Dizileri JSON string'e dönüştür
+    const instagram = instagramArray.length > 0 ? JSON.stringify(instagramArray) : null;
+    const youtube = youtubeArray.length > 0 ? JSON.stringify(youtubeArray) : null;
+    const linkedin = linkedinArray.length > 0 ? JSON.stringify(linkedinArray) : null;
+    const twitter = twitterArray.length > 0 ? JSON.stringify(twitterArray) : null;
+    const facebook = facebookArray.length > 0 ? JSON.stringify(facebookArray) : null;
+    const website = websiteArray.length > 0 ? JSON.stringify(websiteArray) : null;
+    const harita = haritaArray.length > 0 ? JSON.stringify(haritaArray) : null;
+    
+    const yetkiliAdi = formData.get('yetkiliAdi') as string || null;
+    const yetkiliPozisyon = formData.get('yetkiliPozisyon') as string | null;
+    const profilFoto = formData.get('profilFoto') as File | null;
+    const katalogDosya = formData.get('katalogDosya') as File | null;
+    const firmaHakkinda = formData.get('firma_hakkinda') as string | null;
+    const firmaUnvan = formData.get('firma_unvan') as string | null;
+    const firmaVergiNo = formData.get('firma_vergi_no') as string | null;
+    const vergiDairesi = formData.get('vergi_dairesi') as string | null;
+    
+    // Banka hesaplarını topla
+    const bankAccounts: any[] = [];
+    let index = 0;
+    let hasMoreAccounts = true;
+    
+    while (hasMoreAccounts) {
+      const bankId = formData.get(`bank_id_${index}`);
+      if (bankId) {
+        bankAccounts.push({
+          bank_id: formData.get(`bank_id_${index}`),
+          bank_label: formData.get(`bank_label_${index}`),
+          bank_logo: formData.get(`bank_logo_${index}`),
+          account_holder: formData.get(`account_holder_${index}`),
+          iban: formData.get(`iban_${index}`)
+        });
+        index++;
+      } else {
+        hasMoreAccounts = false;
+      }
+    }
+    
+    console.log('Form verileri:', { firmaAdi, slug });
+    console.log('Banka hesapları:', JSON.stringify(bankAccounts, null, 2));
+    
+    // Zorunlu alanları kontrol et
+    if (!firmaAdi || !slug) {
+      console.log('Zorunlu alanlar eksik');
+      return NextResponse.json(
+        { message: 'Firma adı ve URL linki alanları zorunludur' },
+        { status: 400 }
+      );
+    }
+    
+    // Slug kontrolü (benzersiz olmalı)
+    const slugControl = await query('SELECT id FROM firmalar WHERE slug = ?', [slug]);
+    if (Array.isArray(slugControl) && slugControl.length > 0) {
+      console.log('Slug zaten kullanılıyor');
+      return NextResponse.json(
+        { message: 'Bu URL linki zaten kullanılıyor. Lütfen başka bir link seçin.' },
+        { status: 400 }
+      );
+    }
+    
+    // Profil fotoğrafını işle
+    let profilePhotoPath = null;
+    if (profilFoto) {
+      console.log('Profil fotoğrafı yükleniyor...');
+      profilePhotoPath = await handleFileUpload(profilFoto, slug);
+    }
+    
+    // Katalog dosyasını işle
+    let katalogPath = null;
+    if (katalogDosya) {
+      console.log('Katalog dosyası yükleniyor...');
+      if (katalogDosya.type !== 'application/pdf') {
+        return NextResponse.json(
+          { message: 'Katalog dosyası sadece PDF formatında olabilir' },
+          { status: 400 }
+        );
+      }
+      
+      // Kataloglar klasörünü oluştur (yoksa)
+      const katalogDir = path.join(process.cwd(), 'public', 'uploads', 'kataloglar');
+      if (!fs.existsSync(katalogDir)) {
+        fs.mkdirSync(katalogDir, { recursive: true });
+      }
+      
+      // Dosyayı kaydet
+      const katalogBuffer = Buffer.from(await katalogDosya.arrayBuffer());
+      const katalogFilename = `katalog_${slug}_${Date.now()}.pdf`;
+      const katalogSavePath = `/uploads/kataloglar/${katalogFilename}`;
+      const katalogFullPath = path.join(process.cwd(), 'public', katalogSavePath);
+      
+      fs.writeFileSync(katalogFullPath, katalogBuffer);
+      katalogPath = katalogSavePath;
+      console.log(`Katalog dosyası kaydedildi: ${katalogFullPath}`);
+    }
+    
+    console.log('Veritabanına kaydetme başlıyor');
+    
+    // Veritabanına kaydet
+    try {
+      console.log('Veritabanı sorgusu çalıştırılıyor...');
+      
+      // Önce bank_accounts sütununun olup olmadığını kontrol et
+      let hasColumn = false;
+      try {
+        await query('SELECT bank_accounts FROM firmalar LIMIT 1');
+        hasColumn = true;
+      } catch (error) {
+        console.log('bank_accounts sütunu mevcut değil, eski sorgu kullanılacak');
+      }
+      
+      let result;
+      
+      if (hasColumn) {
+        // Banka hesapları varsa
+        if (bankAccounts.length > 0) {
+          const bankAccountsJSON = JSON.stringify(bankAccounts);
+          console.log('Banka hesapları:', bankAccountsJSON);
+          
+          result = await query(
+            `INSERT INTO firmalar 
+             (firma_adi, slug, telefon, eposta, whatsapp, instagram, youtube, linkedin, twitter, facebook, website, harita, profil_foto, yetkili_adi, yetkili_pozisyon, bank_accounts, katalog, firma_hakkinda, firma_unvan, firma_vergi_no, vergi_dairesi, created_at, updated_at) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+            [
+              firmaAdi, 
+              slug, 
+              telefon, 
+              eposta, 
+              whatsapp, 
+              instagram, 
+              youtube, 
+              linkedin,
+              twitter,
+              facebook,
+              website, 
+              harita,
+              profilePhotoPath,
+              yetkiliAdi,
+              yetkiliPozisyon,
+              bankAccountsJSON,
+              katalogPath,
+              firmaHakkinda,
+              firmaUnvan,
+              firmaVergiNo,
+              vergiDairesi
+            ]
+          );
+        } else {
+          // Banka hesapları yoksa
+          result = await query(
+            `INSERT INTO firmalar 
+             (firma_adi, slug, telefon, eposta, whatsapp, instagram, youtube, linkedin, twitter, facebook, website, harita, profil_foto, yetkili_adi, yetkili_pozisyon, katalog, firma_hakkinda, firma_unvan, firma_vergi_no, vergi_dairesi, created_at, updated_at) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+            [
+              firmaAdi, 
+              slug, 
+              telefon, 
+              eposta, 
+              whatsapp, 
+              instagram, 
+              youtube, 
+              linkedin,
+              twitter,
+              facebook,
+              website, 
+              harita,
+              profilePhotoPath,
+              yetkiliAdi,
+              yetkiliPozisyon,
+              katalogPath,
+              firmaHakkinda,
+              firmaUnvan,
+              firmaVergiNo,
+              vergiDairesi
+            ]
+          );
+        }
+      } else {
+        // Eski sorgu - bank_accounts sütunu yoksa
+        result = await query(
+          `INSERT INTO firmalar 
+          (firma_adi, slug, telefon, eposta, whatsapp, instagram, youtube, linkedin, twitter, facebook, website, harita, profil_foto, yetkili_adi, yetkili_pozisyon, katalog, firma_hakkinda, firma_unvan, firma_vergi_no, vergi_dairesi, created_at, updated_at) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+          [
+            firmaAdi, 
+            slug, 
+            telefon, 
+            eposta, 
+            whatsapp, 
+            instagram, 
+            youtube, 
+            linkedin,
+            twitter,
+            facebook,
+            website, 
+            harita,
+            profilePhotoPath,
+            yetkiliAdi,
+            yetkiliPozisyon,
+            katalogPath,
+            firmaHakkinda,
+            firmaUnvan,
+            firmaVergiNo,
+            vergiDairesi
+          ]
+        );
+      }
+      
+      console.log('Veritabanı sonucu:', result);
+      
+      // Eklenen firma ID'sini al
+      let insertedId;
+      if ('lastInsertRowid' in result) {
+        insertedId = result.lastInsertRowid;
+      } else if ('lastID' in result) {
+        insertedId = result.lastID;
+      } else {
+        // Eklenen firmayı slug üzerinden bul
+        const newFirmas = await query('SELECT id FROM firmalar WHERE slug = ?', [slug]) as any[];
+        if (newFirmas && newFirmas.length > 0) {
+          insertedId = newFirmas[0].id;
+        } else {
+          throw new Error('Firma eklendi ancak ID alınamadı');
+        }
+      }
+      
+      console.log('Eklenen firma ID:', insertedId);
+      
+      if (insertedId) {
+        const newFirmas = await query('SELECT * FROM firmalar WHERE id = ?', [insertedId]) as any[];
+        console.log('Yeni firma verileri:', newFirmas);
+        
+        if (newFirmas && newFirmas.length > 0) {
+          // HTML sayfası oluştur
+          try {
+            const htmlPath = await generateHtmlForFirma(newFirmas[0]);
+            console.log(`Firma sayfası oluşturuldu: ${htmlPath}`);
+          } catch (htmlError) {
+            console.error('HTML sayfası oluşturulurken hata oluştu:', htmlError);
+            // HTML oluşturma hatası firma ekleme işlemini engellemez, sadece loglama yapılır
+          }
+          
+          return NextResponse.json(
+            { message: 'Firma başarıyla eklendi', firma: newFirmas[0] },
+            { status: 201 }
+          );
+        }
+      }
+      
+      // Buraya gelindiyse kayıt yapılmış ama firma alınamamış
+      return NextResponse.json(
+        { message: 'Firma kaydedildi ancak detayları getirilemedi' },
+        { status: 201 }
+      );
+    } catch (dbError) {
+      console.error('Veritabanı hatası:', dbError);
+      return NextResponse.json(
+        { message: 'Veritabanı hatası: ' + String(dbError) },
+        { status: 500 }
+      );
+    }
+    
+  } catch (error) {
+    console.error('Firma eklenirken genel hata:', error);
+    return NextResponse.json(
+      { message: 'Firma eklenirken bir hata oluştu', error: String(error) },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * Dosya yükleme işlemleri için yardımcı fonksiyon
+ */
+async function handleFileUpload(file: File, slug: string): Promise<string | null> {
+  try {
+    // Upload dizini oluştur
+    const uploadDir = path.join(process.cwd(), 'public/uploads');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    
+    // Benzersiz dosya adı oluştur
+    const extension = path.extname(file.name);
+    const fileName = `${slug}-${Date.now()}${extension}`;
+    const filePath = path.join(uploadDir, fileName);
+    
+    // Dosyayı kaydet
+    const buffer = Buffer.from(await file.arrayBuffer());
+    fs.writeFileSync(filePath, buffer);
+    
+    // Dosya URL'si (web'den erişim için)
+    return `/uploads/${fileName}`;
+  } catch (error) {
+    console.error('Dosya yükleme hatası:', error);
+    return null;
+  }
+} 

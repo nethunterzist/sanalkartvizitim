@@ -1,0 +1,22 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Anadolu Teknoloji
+TEL;TYPE=WORK,VOICE:05607735992
+TEL;TYPE=WORK,VOICE:05607697072
+EMAIL;TYPE=WORK:info@anadoluteknoloji.com
+EMAIL;TYPE=WORK:destek@anadoluteknoloji.com
+X-SOCIALPROFILE;TYPE=telegram;x-user=anadoluteknoloji:https://t.me/anadoluteknoloji
+X-SOCIALPROFILE;TYPE=telegram;x-user=anadoluteknoloji_official:https://t.me/anadoluteknoloji_official
+X-SOCIALPROFILE;TYPE=instagram;x-user=anadoluteknoloji:https://www.instagram.com/anadoluteknoloji/
+X-SOCIALPROFILE;TYPE=instagram;x-user=anadoluteknoloji_official:https://www.instagram.com/anadoluteknoloji_official/
+X-SOCIALPROFILE;TYPE=youtube;x-user=anadoluteknoloji:anadoluteknoloji
+X-SOCIALPROFILE;TYPE=youtube;x-user=anadoluteknolojiTV:anadoluteknolojiTV
+X-SOCIALPROFILE;TYPE=linkedin;x-user=anadoluteknoloji:anadoluteknoloji
+X-SOCIALPROFILE;TYPE=linkedin;x-user=anadoluteknoloji-group:anadoluteknoloji-group
+X-SOCIALPROFILE;TYPE=twitter;x-user=anadoluteknoloji:https://twitter.com/anadoluteknoloji
+X-SOCIALPROFILE;TYPE=twitter;x-user=anadoluteknoloji_tr:https://twitter.com/anadoluteknoloji_tr
+X-SOCIALPROFILE;TYPE=facebook;x-user=anadoluteknoloji:anadoluteknoloji
+X-SOCIALPROFILE;TYPE=facebook;x-user=anadoluteknoloji.official:anadoluteknoloji.official
+X-SOCIALPROFILE;TYPE=tiktok;x-user=anadoluteknoloji:https://tiktok.com/@anadoluteknoloji
+X-SOCIALPROFILE;TYPE=tiktok;x-user=anadoluteknoloji.official:https://tiktok.com/@anadoluteknoloji.official
+END:VCARD

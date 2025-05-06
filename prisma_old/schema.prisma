@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model admins {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  password   String
+  created_at DateTime @default(now())
+}
+
+model firmalar {
+  id                Int       @id @default(autoincrement())
+  firma_adi         String
+  slug              String    @unique
+  telefon           String?
+  eposta            String?
+  whatsapp          String?
+  instagram         String?
+  youtube           String?
+  website           String?
+  harita            String?
+  profil_foto       String?
+  vcard_dosya       String?
+  yetkili_adi       String?
+  yetkili_pozisyon  String?
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @default(now())
+  goruntulenme      Int       @default(0)
+  bank_accounts     String?
+  linkedin          String?
+  twitter           String?
+  facebook          String?
+  katalog           String?
+  firma_hakkinda    String?
+}
+
+model Icon {
+  id       Int    @id @default(autoincrement())
+  name     String
+  priority Int
+}
+
+model SiteSettings {
+  id            Int      @id @default(autoincrement())
+  setting_key   String   @unique
+  setting_value String?
+  created_at    DateTime @default(now())
+  updated_at    DateTime
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  email      String   @unique
+  password   String
+  full_name  String?
+  created_at DateTime @default(now())
+  updated_at DateTime
+}

@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/// Map to `admins` table
+model admin {
+  id         Int      @id @default(autoincrement())
+  username   String   @unique
+  password   String
+  created_at DateTime @default(now())
+
+  @@map("admins")
+}
+
+/// Map to `firmalar` table
+model firma {
+  id                Int       @id @default(autoincrement())
+  firma_adi         String
+  slug              String    @unique
+  telefon           String?
+  eposta            String?
+  whatsapp          String?
+  instagram         String?
+  youtube           String?
+  website           String?
+  harita            String?
+  profil_foto       String?
+  vcard_dosya       String?
+  yetkili_adi       String?
+  yetkili_pozisyon  String?
+  created_at        DateTime  @default(now())
+  updated_at        DateTime  @default(now())
+  goruntulenme      Int       @default(0)
+  bank_accounts     String?
+  linkedin          String?
+  twitter           String?
+  facebook          String?
+  tiktok            String?
+  katalog           String?
+  firma_hakkinda    String?
+  firma_unvan       String?
+  firma_vergi_no    String?
+  vergi_dairesi     String?
+
+  @@map("firmalar")
+}
+
+/// Map to `Icon` table
+model icon {
+  id       Int    @id @default(autoincrement())
+  name     String
+  priority Int
+
+  @@map("Icon")
+}
