@@ -657,30 +657,20 @@ export async function generateHtmlForFirma(firma: any, oldSlug?: string): Promis
         console.log('İletişim verileri parse edildi:', commData);
         
         // Her bir iletişim türü için verileri işle
-        if (Array.isArray(commData)) {
-          commData.forEach((item: any) => {
-            if (item.type && item.value) {
-              const commItem = {
-                value: item.value,
-                label: item.label || undefined
-              };
-              
-              switch (item.type) {
-                case 'telefon':
-                  telefonlar.push(commItem);
-                  break;
-                case 'eposta':
-                  epostalar.push(commItem);
-                  break;
-                case 'whatsapp':
-                  whatsapplar.push(commItem);
-                  break;
-                case 'telegram':
-                  telegramlar.push(commItem);
-                  break;
-              }
-            }
-          });
+        if (commData.telefonlar && Array.isArray(commData.telefonlar)) {
+          telefonlar = commData.telefonlar;
+        }
+        
+        if (commData.epostalar && Array.isArray(commData.epostalar)) {
+          epostalar = commData.epostalar;
+        }
+        
+        if (commData.whatsapplar && Array.isArray(commData.whatsapplar)) {
+          whatsapplar = commData.whatsapplar;
+        }
+        
+        if (commData.telegramlar && Array.isArray(commData.telegramlar)) {
+          telegramlar = commData.telegramlar;
         }
         
         console.log('İşlenmiş iletişim verileri:', {

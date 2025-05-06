@@ -2,8 +2,11 @@ import QRCode from 'qrcode';
 import fs from 'fs';
 import path from 'path';
 
-export async function generateQRCode(slug: string, domain: string = 'sanalkartvizitim.com'): Promise<string> {
-  const url = `https://${domain}/${slug}`;
+export async function generateQRCode(slug: string): Promise<string> {
+  // Çevre değişkeninden veya varsayılan olarak Vercel domain'ini kullan
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://sanalkartvizitim-4ekk.vercel.app';
+  const url = `${baseUrl}/${slug}`;
+  
   const dirPath = path.join(process.cwd(), 'public', 'qrcodes');
   const filePath = path.join(dirPath, `${slug}.png`);
   

@@ -1,0 +1,22 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Global Sanayi
+TEL;TYPE=WORK,VOICE:05408289440
+TEL;TYPE=WORK,VOICE:05300397285
+EMAIL;TYPE=WORK:info@globalsanayi.com
+EMAIL;TYPE=WORK:destek@globalsanayi.com
+X-SOCIALPROFILE;TYPE=telegram;x-user=globalsanayi:https://t.me/globalsanayi
+X-SOCIALPROFILE;TYPE=telegram;x-user=globalsanayi_official:https://t.me/globalsanayi_official
+X-SOCIALPROFILE;TYPE=instagram;x-user=globalsanayi:https://www.instagram.com/globalsanayi/
+X-SOCIALPROFILE;TYPE=instagram;x-user=globalsanayi_official:https://www.instagram.com/globalsanayi_official/
+X-SOCIALPROFILE;TYPE=youtube;x-user=globalsanayi:globalsanayi
+X-SOCIALPROFILE;TYPE=youtube;x-user=globalsanayiTV:globalsanayiTV
+X-SOCIALPROFILE;TYPE=linkedin;x-user=globalsanayi:globalsanayi
+X-SOCIALPROFILE;TYPE=linkedin;x-user=globalsanayi-group:globalsanayi-group
+X-SOCIALPROFILE;TYPE=twitter;x-user=globalsanayi:https://twitter.com/globalsanayi
+X-SOCIALPROFILE;TYPE=twitter;x-user=globalsanayi_tr:https://twitter.com/globalsanayi_tr
+X-SOCIALPROFILE;TYPE=facebook;x-user=globalsanayi:globalsanayi
+X-SOCIALPROFILE;TYPE=facebook;x-user=globalsanayi.official:globalsanayi.official
+X-SOCIALPROFILE;TYPE=tiktok;x-user=globalsanayi:https://tiktok.com/@globalsanayi
+X-SOCIALPROFILE;TYPE=tiktok;x-user=globalsanayi.official:https://tiktok.com/@globalsanayi.official
+END:VCARD

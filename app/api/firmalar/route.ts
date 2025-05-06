@@ -364,8 +364,8 @@ export async function POST(req: NextRequest) {
     
     // HTML ve vCard dosyalarını oluştur
     try {
-      const htmlPath = await generateHtmlForFirma(refreshedFirma);
-      console.log('HTML dosyası oluşturuldu:', htmlPath);
+      await generateHtmlForFirma(refreshedFirma);
+      console.log(`HTML oluşturuldu: ${refreshedFirma.slug}`);
       
       // QR kod oluştur
       const qrCodePath = await generateQRCode(refreshedFirma.slug);
@@ -1013,8 +1013,8 @@ export async function PUT(req: NextRequest) {
     
     // HTML ve vCard dosyalarını güncelle
     try {
-      const htmlPath = await generateHtmlForFirma(refreshedFirma);
-      console.log('HTML dosyası güncellendi:', htmlPath);
+      await generateHtmlForFirma(refreshedFirma);
+      console.log(`HTML oluşturuldu: ${refreshedFirma.slug}`);
       
       // QR kod güncelle (eğer slug değiştiyse)
       if (slug !== existingFirm.slug) {

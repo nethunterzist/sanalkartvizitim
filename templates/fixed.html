@@ -702,8 +702,8 @@
                         {{/if}}
                         
                         <!-- İLETİŞİM BİLGİLERİ BÖLÜMÜ - telefonlar -->
-                        {{#if telefon}}
-                          {{#each telefon}}
+                        {{#if telefonlar}}
+                          {{#each telefonlar}}
                           <div class="col-3 icon">
                             <a href="tel:{{this.value}}" class="d-flex flex-column align-items-center text-decoration-none">
                               <img src="/img/tel.png" alt="Telefon">
@@ -714,8 +714,8 @@
                         {{/if}}
 
                         <!-- İLETİŞİM BİLGİLERİ BÖLÜMÜ - epostalar -->
-                        {{#if eposta}}
-                          {{#each eposta}}
+                        {{#if epostalar}}
+                          {{#each epostalar}}
                           <div class="col-3 icon">
                             <a href="mailto:{{this.value}}" class="d-flex flex-column align-items-center text-decoration-none">
                               <img src="/img/mail.png" alt="E-posta">
@@ -726,8 +726,8 @@
                         {{/if}}
 
                         <!-- İLETİŞİM BİLGİLERİ BÖLÜMÜ - whatsapplar -->
-                        {{#if whatsapp}}
-                          {{#each whatsapp}}
+                        {{#if whatsapplar}}
+                          {{#each whatsapplar}}
                           <div class="col-3 icon">
                             <a href="https://wa.me/{{this.value}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
                               <img src="/img/wp.png" alt="WhatsApp">
@@ -738,8 +738,8 @@
                         {{/if}}
 
                         <!-- İLETİŞİM BİLGİLERİ BÖLÜMÜ - telegramlar -->
-                        {{#if telegram}}
-                          {{#each telegram}}
+                        {{#if telegramlar}}
+                          {{#each telegramlar}}
                           <div class="col-3 icon">
                             <a href="https://t.me/{{this.value}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
                               <img src="/img/telegram.png" alt="Telegram">
@@ -750,8 +750,8 @@
                         {{/if}}
 
                         <!-- İLETİŞİM BİLGİLERİ BÖLÜMÜ - websiteler -->
-                        {{#if website}}
-                          {{#each website}}
+                        {{#if websiteler}}
+                          {{#each websiteler}}
                           <div class="col-3 icon">
                             <a href="{{this.value}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
                               <img src="/img/web.png" alt="Website">
@@ -762,84 +762,12 @@
                         {{/if}}
 
                         <!-- Harita ikonları -->
-                        {{#if harita}}
-                          {{#each harita}}
+                        {{#if haritalar}}
+                          {{#each haritalar}}
                           <div class="col-3 icon">
                             <a href="{{this.value}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
                               <img src="/img/map.png" alt="Harita">
                               <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}Harita{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- SOSYAL MEDYA BÖLÜMÜ - Instagram -->
-                        {{#if instagram}}
-                          {{#each instagram}}
-                          <div class="col-3 icon">
-                            <a href="https://www.instagram.com/{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/instagram.png" alt="Instagram">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}Instagram{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- SOSYAL MEDYA BÖLÜMÜ - Youtube -->
-                        {{#if youtube}}
-                          {{#each youtube}}
-                          <div class="col-3 icon">
-                            <a href="https://www.youtube.com/{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/youtube.png" alt="YouTube">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}YouTube{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- SOSYAL MEDYA BÖLÜMÜ - LinkedIn -->
-                        {{#if linkedin}}
-                          {{#each linkedin}}
-                          <div class="col-3 icon">
-                            <a href="https://www.linkedin.com/in/{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/linkedin.png" alt="LinkedIn">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}LinkedIn{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- SOSYAL MEDYA BÖLÜMÜ - Twitter/X -->
-                        {{#if twitter}}
-                          {{#each twitter}}
-                          <div class="col-3 icon">
-                            <a href="https://twitter.com/{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/twitter.png" alt="Twitter">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}Twitter{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- SOSYAL MEDYA BÖLÜMÜ - Facebook -->
-                        {{#if facebook}}
-                          {{#each facebook}}
-                          <div class="col-3 icon">
-                            <a href="https://www.facebook.com/{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/facebook.png" alt="Facebook">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}Facebook{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- SOSYAL MEDYA BÖLÜMÜ - TikTok -->
-                        {{#if tiktok}}
-                          {{#each tiktok}}
-                          <div class="col-3 icon">
-                            <a href="https://www.tiktok.com/@{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/tiktok.png" alt="TikTok">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}TikTok{{/if}}</span>
                             </a>
                           </div>
                           {{/each}}

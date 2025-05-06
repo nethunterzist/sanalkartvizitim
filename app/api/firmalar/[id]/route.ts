@@ -113,257 +113,47 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  console.log(`[API] PUT /api/firmalar/${params.id} isteği alındı`);
-  
-  try {
-    const id = Number(params.id);
-    if (isNaN(id)) {
-      return NextResponse.json({ message: 'Geçersiz Firma ID' }, { status: 400 });
-    }
+  const id = parseInt(params.id);
 
-    const formData = await request.formData();
-    console.log("Form verileri alındı, işleniyor...");
-    const formKeys = Array.from(formData.keys());
-    console.log("Form alanları:", formKeys.join(", "));
+  if (isNaN(id)) {
+    return NextResponse.json({ error: 'Geçersiz ID' }, { status: 400 });
+  }
+
+  try {
+    const data = await request.json();
     
-    // Firma kontrolü
+    // Mevcut firmayı sorgula
     const existingFirma = await prisma.firmalar.findUnique({
-      where: { id: id }
+      where: { id }
     });
     
     if (!existingFirma) {
-      console.error(`ID ${id} olan firma bulunamadı`);
-      return NextResponse.json({ message: 'Firma bulunamadı' }, { status: 404 });
+      return NextResponse.json({ error: 'Firma bulunamadı' }, { status: 404 });
     }
     
-    // --- İletişim Verilerini İşleme (POST'a benzer şekilde) ---
-    let telefonlar: Array<{value: string, label?: string}> = [];
-    let epostalar: Array<{value: string, label?: string}> = [];
-    let whatsapplar: Array<{value: string, label?: string}> = [];
-    let telegramlar: Array<{value: string, label?: string}> = [];
-    let haritalar: Array<{value: string, label?: string}> = [];
-    let websiteler: Array<{value: string, label?: string}> = [];
-
-    ['telefon', 'eposta', 'whatsapp', 'telegram', 'harita', 'website'].forEach(type => {
-      formKeys.filter(key => key.startsWith(`${type}[`)).forEach(key => {
-        const value = formData.get(key)?.toString();
-        const indexMatch = key.match(/\[(\d+)\]/);
-        const index = indexMatch ? indexMatch[1] : null;
-        const labelKey = index ? `${type}_label[${index}]` : null;
-        const label = labelKey ? formData.get(labelKey)?.toString() : null;
-
-        if (value) {
-          const item: {value: string, label?: string} = { value };
-          if (label && label.trim() !== '') {
-            item.label = label.trim();
-          }
-          if (type === 'telefon') telefonlar.push(item);
-          else if (type === 'eposta') epostalar.push(item);
-          else if (type === 'whatsapp') whatsapplar.push(item);
-          else if (type === 'telegram') telegramlar.push(item);
-          else if (type === 'harita') haritalar.push(item);
-          else if (type === 'website') websiteler.push(item);
-        }
-      });
+    // Slug değişikliği kontrolü
+    const oldSlug = existingFirma.slug;
+    const newSlug = data.slug || oldSlug;
+    
+    // Firmayı güncelle
+    const updatedFirma = await prisma.firmalar.update({
+      where: { id },
+      data: data
     });
-
-    const uniqueItems = <T extends { value: string, label?: string }>(array: T[]): Array<T> => {
-        if (!array || !Array.isArray(array)) return [];
-        const seenValues = new Map<string, T>();
-        array.forEach(item => {
-            if (item && item.value) {
-                const normalizedValue = item.value.toLowerCase().trim();
-                seenValues.set(normalizedValue, item);
-            }
-        });
-        return Array.from(seenValues.values());
-    };
-
-    telefonlar = uniqueItems(telefonlar);
-    epostalar = uniqueItems(epostalar);
-    whatsapplar = uniqueItems(whatsapplar);
-    telegramlar = uniqueItems(telegramlar);
-    haritalar = uniqueItems(haritalar);
-    websiteler = uniqueItems(websiteler);
-    telegramlar = telegramlar.map(item => ({ ...item, value: item.value.replace(/^@/, '') }));
-
-    const communicationData = { telefonlar, epostalar, whatsapplar, telegramlar, haritalar, websiteler };
-    const communicationDataJSON = JSON.stringify(communicationData);
-    console.log("İşlenmiş İletişim Verileri (PUT):", communicationDataJSON);
-
-    // --- Sosyal Medya Verilerini İşleme (POST'a benzer şekilde) ---
-    const socialMediaData = processSocialMediaAccounts(formData);
-    const socialMediaDataJSON = JSON.stringify(socialMediaData);
-    console.log("İşlenmiş Sosyal Medya Verileri (PUT):", socialMediaDataJSON);
-
-    // --- Banka Hesapları İşleme --- 
-    let bankAccountsJSON = existingFirma.bank_accounts; // Varsayılan olarak mevcut değeri koru
-    if (formData.has('bank_accounts')) {
-        const bankAccountsData = formData.get('bank_accounts');
-        if (bankAccountsData) {
-            try {
-                // Gelen verinin geçerli bir JSON olduğundan emin olalım
-                JSON.parse(bankAccountsData.toString()); 
-                bankAccountsJSON = bankAccountsData.toString();
-            } catch (error) {
-                console.error("Banka hesapları JSON parse hatası (PUT):", error);
-                // Hata durumunda mevcut veriyi koru veya null ata, duruma göre karar ver
-                // bankAccountsJSON = null; // Veya mevcut değeri koru
-            }
-        } else {
-            // Formdan boş gönderildiyse null yap
-            bankAccountsJSON = null;
-        }
-    } 
-    console.log("İşlenmiş Banka Hesapları (PUT):", bankAccountsJSON);
-
-    // --- Dosya İşleme --- (Mevcut dosya silme/güncelleme mantığı korunmalı)
-    let profilFotoPath = existingFirma.profil_foto; 
-    let katalogPath = existingFirma.katalog;
-    let firmaLogoPath = existingFirma.firma_logo;
-    const deleteProfilFoto = formData.get('delete_profil_foto') === '1';
-    const deleteKatalog = formData.get('delete_katalog') === '1';
-    const deleteFirmaLogo = formData.get('delete_firma_logo') === '1';
-    const profilFotoFile = formData.get('profilFoto') as File;
-    const katalogFile = formData.get('katalog') as File;
-    const firmaLogoFile = formData.get('logoFile') as File;
-
-    if (deleteProfilFoto) {
-        // Eski dosyayı sil (diskten)
-        if (profilFotoPath) { /* ... dosya silme kodu ... */ }
-        profilFotoPath = null;
-    } else if (profilFotoFile && profilFotoFile.size > 0) {
-        // Yeni dosya yüklendiyse eskiyi sil (varsa) ve yeniyi kaydet
-        if (profilFotoPath) { /* ... dosya silme kodu ... */ }
-        profilFotoPath = await handleFileUpload(profilFotoFile, existingFirma.slug);
-    }
-
-    if (deleteKatalog) {
-        if (katalogPath) { /* ... dosya silme kodu ... */ }
-        katalogPath = null;
-    } else if (katalogFile && katalogFile.size > 0) {
-        if (katalogPath) { /* ... dosya silme kodu ... */ }
-        katalogPath = await handleFileUpload(katalogFile, existingFirma.slug);
-    }
-
-    if (deleteFirmaLogo) {
-        // Eski dosyayı sil (diskten)
-        if (firmaLogoPath) {
-            const logoFilePath = path.join(process.cwd(), 'public', firmaLogoPath);
-            if (fs.existsSync(logoFilePath)) {
-                fs.unlinkSync(logoFilePath);
-                console.log(`Firma logosu silindi: ${logoFilePath}`);
-            }
-        }
-        firmaLogoPath = null;
-    } else if (firmaLogoFile && firmaLogoFile.size > 0) {
-        // Yeni dosya yüklendiyse eskiyi sil (varsa) ve yeniyi kaydet
-        if (firmaLogoPath) {
-            const logoFilePath = path.join(process.cwd(), 'public', firmaLogoPath);
-            if (fs.existsSync(logoFilePath)) {
-                fs.unlinkSync(logoFilePath);
-                console.log(`Firma logosu silindi: ${logoFilePath}`);
-            }
-        }
-        firmaLogoPath = await handleFileUpload(firmaLogoFile, existingFirma.slug);
-    }
-
-    // --- Diğer Alanları Alma --- 
-    const firma_adi = formData.get("firma_adi")?.toString() || existingFirma.firma_adi;
-    const slug = formData.get("slug")?.toString() || existingFirma.slug;
-    const yetkili_adi = formData.get("yetkili_adi")?.toString() || existingFirma.yetkili_adi;
-    const yetkili_pozisyon = formData.get("yetkili_pozisyon")?.toString() || existingFirma.yetkili_pozisyon;
-    const firma_unvan = formData.get("firma_unvan")?.toString() || existingFirma.firma_unvan;
-    const firma_vergi_no = formData.get("firma_vergi_no")?.toString() || existingFirma.firma_vergi_no;
-    const vergi_dairesi = formData.get("vergi_dairesi")?.toString() || existingFirma.vergi_dairesi;
-    const firma_hakkinda = formData.get("firma_hakkinda")?.toString() || existingFirma.firma_hakkinda;
-    const firma_hakkinda_baslik = formData.get("firma_hakkinda_baslik")?.toString() || existingFirma.firma_hakkinda_baslik;
-
-    // Slug kontrolü (aynı slug başka bir firmada var mı)
-    if (slug !== existingFirma.slug) {
-        const existingSlug = await prisma.firmalar.findFirst({ where: { slug: slug, id: { not: id } } });
-        if (existingSlug) {
-            return NextResponse.json({ message: 'Bu URL linki zaten kullanılıyor.' }, { status: 400 });
-        }
-        // Slug değiştiyse, eski dosya/klasörleri yeniden adlandırma/taşıma gerekebilir.
-        // Bu kısım implemente edilmeli.
-        console.warn("[PUT] Slug değişti, dosya/klasör taşıma implemente edilmedi.");
-    }
-
-    // --- Veritabanını Güncelle --- 
-    const updateData: Record<string, any> = {
-        firma_adi,
-        slug,
-        yetkili_adi,
-        yetkili_pozisyon,
-        firma_unvan,
-        firma_vergi_no,
-        vergi_dairesi,
-        firma_hakkinda,
-        firma_hakkinda_baslik,
-        profil_foto: profilFotoPath,
-        firma_logo: firmaLogoPath,
-        katalog: katalogPath,
-        communication_data: communicationDataJSON,
-        social_media_data: socialMediaDataJSON,
-        bank_accounts: bankAccountsJSON,
-        updated_at: new Date(),
-    };
-
-    console.log("Veritabanı Güncelleme Verisi:", updateData);
-
-    const updatedFirm = await prisma.firmalar.update({
-        where: { id: id },
-        data: updateData,
-    });
-
-    console.log("Firma başarıyla güncellendi:", updatedFirm);
-
-    // --- HTML, vCard, QR Güncelleme --- (POST'a benzer)
-    // En güncel firma verilerini tekrar çek
-    const refreshedFirma = await prisma.firmalar.findUnique({
-      where: { id: updatedFirm.id }
-    }) as any;
     
-    if (!refreshedFirma) {
-      throw new Error("Güncel firma verisi bulunamadı (PUT sonrası)");
-    }
-    
+    // HTML yeniden oluştur
     try {
-        const htmlPath = await generateHtmlForFirma(refreshedFirma);
-        console.log('HTML dosyası güncellendi:', htmlPath);
-        
-        // QR kod güncelle (eğer slug değiştiyse)
-        if (slug !== existingFirma.slug) {
-            const qrCodePath = await generateQRCode(refreshedFirma.slug);
-            console.log('QR kod güncellendi:', qrCodePath);
-            // Eski QR kod silinebilir.
-        }
-        
-        // vCard güncelle - vcardData dolduruldu
-        const vcardData: VCardData = {
-            firma_adi: refreshedFirma.firma_adi,
-            slug: refreshedFirma.slug,
-            // Diğer alanları da refreshedFirma'dan ekle (telefon, eposta vb. null olabilir)
-            telefon: refreshedFirma.telefon || undefined,
-            eposta: refreshedFirma.eposta || undefined,
-            website: refreshedFirma.website || undefined,
-            communication_data: refreshedFirma.communication_data || null, // JSON verilerini de gönder
-            social_media_data: refreshedFirma.social_media_data || null 
-        };
-        const vcardPath = await generateVCard(vcardData);
-        console.log('vCard dosyası güncellendi:', vcardPath);
+      await generateHtmlForFirma(updatedFirma, oldSlug !== newSlug ? oldSlug : undefined);
+      console.log(`HTML yeniden oluşturuldu: ${updatedFirma.slug}`);
     } catch (error) {
-        console.error('HTML/vCard/QR güncellenirken hata (PUT):', error);
+      console.error('HTML oluşturma hatası:', error);
     }
     
-    return NextResponse.json({ message: 'Firma başarıyla güncellendi', firma: refreshedFirma });
-
+    return NextResponse.json(updatedFirma);
+    
   } catch (error) {
-    console.error('Firma güncellenirken hata oluştu (PUT):', error);
-    let errorMessage = 'Firma güncellenirken bir hata oluştu';
-    if (error instanceof Error) { errorMessage = error.message; }
-    return NextResponse.json({ message: errorMessage, error: String(error) }, { status: 500 });
+    console.error('Güncelleme hatası:', error);
+    return NextResponse.json({ error: 'İşlem başarısız' }, { status: 500 });
   }
 }
 

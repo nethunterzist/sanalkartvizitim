@@ -1,0 +1,22 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Ultra Teknoloji
+TEL;TYPE=WORK,VOICE:05401096066
+TEL;TYPE=WORK,VOICE:05704376924
+EMAIL;TYPE=WORK:info@ultrateknoloji.com
+EMAIL;TYPE=WORK:destek@ultrateknoloji.com
+X-SOCIALPROFILE;TYPE=telegram;x-user=ultrateknoloji:https://t.me/ultrateknoloji
+X-SOCIALPROFILE;TYPE=telegram;x-user=ultrateknoloji_official:https://t.me/ultrateknoloji_official
+X-SOCIALPROFILE;TYPE=instagram;x-user=ultrateknoloji:https://www.instagram.com/ultrateknoloji/
+X-SOCIALPROFILE;TYPE=instagram;x-user=ultrateknoloji_official:https://www.instagram.com/ultrateknoloji_official/
+X-SOCIALPROFILE;TYPE=youtube;x-user=ultrateknoloji:ultrateknoloji
+X-SOCIALPROFILE;TYPE=youtube;x-user=ultrateknolojiTV:ultrateknolojiTV
+X-SOCIALPROFILE;TYPE=linkedin;x-user=ultrateknoloji:ultrateknoloji
+X-SOCIALPROFILE;TYPE=linkedin;x-user=ultrateknoloji-group:ultrateknoloji-group
+X-SOCIALPROFILE;TYPE=twitter;x-user=ultrateknoloji:https://twitter.com/ultrateknoloji
+X-SOCIALPROFILE;TYPE=twitter;x-user=ultrateknoloji_tr:https://twitter.com/ultrateknoloji_tr
+X-SOCIALPROFILE;TYPE=facebook;x-user=ultrateknoloji:ultrateknoloji
+X-SOCIALPROFILE;TYPE=facebook;x-user=ultrateknoloji.official:ultrateknoloji.official
+X-SOCIALPROFILE;TYPE=tiktok;x-user=ultrateknoloji:https://tiktok.com/@ultrateknoloji
+X-SOCIALPROFILE;TYPE=tiktok;x-user=ultrateknoloji.official:https://tiktok.com/@ultrateknoloji.official
+END:VCARD

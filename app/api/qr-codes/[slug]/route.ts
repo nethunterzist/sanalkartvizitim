@@ -2,10 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import path from 'path';
 import Handlebars from 'handlebars';
 import fs from 'fs';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../../../../lib/db';
 import { generateQRCode } from '../../../../lib/qrCodeGenerator';
-
-const prisma = new PrismaClient();
 
 export async function GET(
   request: NextRequest,

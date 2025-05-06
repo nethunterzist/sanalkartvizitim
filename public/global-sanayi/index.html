@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{firma_adi}} - Dijital Kartvizit</title>
+    <title>Global Sanayi - Dijital Kartvizit</title>
     <link rel="icon" href="https://sanalkartvizitim.com/wp-content/uploads/2024/03/fav.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -592,23 +592,15 @@
         <div class="background" onclick="closeMenu()">
             <div class="card-content">
                 <div class="profile-container">
-                    {{#if profil_foto}}
-                    <img src="{{profil_foto}}" class="profile-image" alt="{{firma_adi}}">
-                    {{else}}
-                    <img src="/img/profile-default.png" class="profile-image" alt="{{firma_adi}}">
-                    {{/if}}
+                    <img src="/img/profile-default.png" class="profile-image" alt="Global Sanayi">
                 </div>
 
                 <div class="container">
                     <div class="row justify-content-center mb-2">
                         <div class="col-12 text-center">
-                            <h1 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 5px; color: #000; display: block !important; visibility: visible !important;">{{firma_adi}}</h1>
-                            {{#if yetkili_adi}}
-                            <h1 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; color: #000; display: block !important; visibility: visible !important;">{{yetkili_adi}}</h1>
-                            {{/if}}
-                            {{#if yetkili_pozisyon}}
-                            <p style="font-size: 1rem; color: #666; display: block !important; visibility: visible !important;">{{yetkili_pozisyon}}</p>
-                            {{/if}}
+                            <h1 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 5px; color: #000; display: block !important; visibility: visible !important;">Global Sanayi</h1>
+                            <h1 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; color: #000; display: block !important; visibility: visible !important;">Zeynep Yılmaz</h1>
+                            <p style="font-size: 1rem; color: #666; display: block !important; visibility: visible !important;">Pazarlama Müdürü</p>
                         </div>
                     </div>
                 </div>
@@ -616,7 +608,7 @@
                 <div class="container"> 
                     <div class="row align-items-start mb-2 justify-content-center"> 
                         <div class="col-3 col-md-2 rehber-icon">
-                            <a href="{{vcard_path}}" download="{{firma_adi}}.vcf">
+                            <a href="/global-sanayi/global-sanayi.vcf" download="Global Sanayi.vcf">
                                 <img src="/img/rehber.png" 
                                      alt="Rehber" 
                                      class="img-fluid d-block mx-auto">
@@ -641,209 +633,36 @@
                         </div>
                         
                         <div class="col-3 icon">
-                            <a href="/{{slug}}/qr" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
+                            <a href="/global-sanayi/qr" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
                                 <img src="/img/qrcode.png" alt="QR Kod">
                                 <span class="mt-1 text-center small icon-label">QR</span>
                             </a>
                         </div>
                         
-                        {{#if bank_accounts}}
                         <div class="col-3 icon">
                             <a href="#" onclick="showBankAccounts(event)" class="d-flex flex-column align-items-center text-decoration-none">
                                 <img src="/img/iban.png" alt="IBAN Bilgileri">
                                 <span class="mt-1 text-center small icon-label">IBAN Bilgileri</span>
                             </a>
                         </div>
-                        {{/if}}
                         
-                        {{#if katalog}}
-                        <div class="col-3 icon">
-                            <a href="{{katalog}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                                <img src="/img/pdf.png" alt="Katalog">
-                                <span class="mt-1 text-center small icon-label">Katalog</span>
-                            </a>
-                        </div>
-                        {{/if}}
                         
-                        {{#if firma_hakkinda}}
                         <div class="col-3 icon about-icon">
                             <a href="#" onclick="showAboutContent(event)" class="d-flex flex-column align-items-center text-decoration-none">
-                                <img src="/img/about.png" alt="{{#if firma_hakkinda_baslik}}{{firma_hakkinda_baslik}}{{else}}Hakkımızda{{/if}}">
-                                <span class="mt-1 text-center small icon-label">{{#if firma_hakkinda_baslik}}{{firma_hakkinda_baslik}}{{else}}Hakkımızda{{/if}}</span>
+                                <img src="/img/about.png" alt="Hakkımızda">
+                                <span class="mt-1 text-center small icon-label">Hakkımızda</span>
                             </a>
                         </div>
-                        {{/if}}
                         
-                        {{#if firma_unvan}}
                         <div class="col-3 icon">
                             <a href="#" onclick="showTaxContent(event)" class="d-flex flex-column align-items-center text-decoration-none">
                                 <img src="/img/tax.png" alt="Vergi Bilgileri">
                                 <span class="mt-1 text-center small icon-label">Vergi Bilgileri</span>
                             </a>
                         </div>
-                        {{else}}
-                        {{#if firma_vergi_no}}
-                        <div class="col-3 icon">
-                            <a href="#" onclick="showTaxContent(event)" class="d-flex flex-column align-items-center text-decoration-none">
-                                <img src="/img/tax.png" alt="Vergi Bilgileri">
-                                <span class="mt-1 text-center small icon-label">Vergi Bilgileri</span>
-                            </a>
-                        </div>
-                        {{else}}
-                        {{#if vergi_dairesi}}
-                        <div class="col-3 icon">
-                            <a href="#" onclick="showTaxContent(event)" class="d-flex flex-column align-items-center text-decoration-none">
-                                <img src="/img/tax.png" alt="Vergi Bilgileri">
-                                <span class="mt-1 text-center small icon-label">Vergi Bilgileri</span>
-                            </a>
-                        </div>
-                        {{/if}}
-                        {{/if}}
-                        {{/if}}
                         
-                        <!-- İLETİŞİM BİLGİLERİ BÖLÜMÜ - telefonlar -->
-                        {{#if telefon}}
-                          {{#each telefon}}
-                          <div class="col-3 icon">
-                            <a href="tel:{{this.value}}" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/tel.png" alt="Telefon">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}Telefon{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- İLETİŞİM BİLGİLERİ BÖLÜMÜ - epostalar -->
-                        {{#if eposta}}
-                          {{#each eposta}}
-                          <div class="col-3 icon">
-                            <a href="mailto:{{this.value}}" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/mail.png" alt="E-posta">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}E-posta{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- İLETİŞİM BİLGİLERİ BÖLÜMÜ - whatsapplar -->
-                        {{#if whatsapp}}
-                          {{#each whatsapp}}
-                          <div class="col-3 icon">
-                            <a href="https://wa.me/{{this.value}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/wp.png" alt="WhatsApp">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}WhatsApp{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- İLETİŞİM BİLGİLERİ BÖLÜMÜ - telegramlar -->
-                        {{#if telegram}}
-                          {{#each telegram}}
-                          <div class="col-3 icon">
-                            <a href="https://t.me/{{this.value}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/telegram.png" alt="Telegram">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}Telegram{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- İLETİŞİM BİLGİLERİ BÖLÜMÜ - websiteler -->
-                        {{#if website}}
-                          {{#each website}}
-                          <div class="col-3 icon">
-                            <a href="{{this.value}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/web.png" alt="Website">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}Website{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- Harita ikonları -->
-                        {{#if harita}}
-                          {{#each harita}}
-                          <div class="col-3 icon">
-                            <a href="{{this.value}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/map.png" alt="Harita">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}Harita{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- SOSYAL MEDYA BÖLÜMÜ - Instagram -->
-                        {{#if instagram}}
-                          {{#each instagram}}
-                          <div class="col-3 icon">
-                            <a href="https://www.instagram.com/{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/instagram.png" alt="Instagram">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}Instagram{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- SOSYAL MEDYA BÖLÜMÜ - Youtube -->
-                        {{#if youtube}}
-                          {{#each youtube}}
-                          <div class="col-3 icon">
-                            <a href="https://www.youtube.com/{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/youtube.png" alt="YouTube">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}YouTube{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- SOSYAL MEDYA BÖLÜMÜ - LinkedIn -->
-                        {{#if linkedin}}
-                          {{#each linkedin}}
-                          <div class="col-3 icon">
-                            <a href="https://www.linkedin.com/in/{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/linkedin.png" alt="LinkedIn">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}LinkedIn{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- SOSYAL MEDYA BÖLÜMÜ - Twitter/X -->
-                        {{#if twitter}}
-                          {{#each twitter}}
-                          <div class="col-3 icon">
-                            <a href="https://twitter.com/{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/twitter.png" alt="Twitter">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}Twitter{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- SOSYAL MEDYA BÖLÜMÜ - Facebook -->
-                        {{#if facebook}}
-                          {{#each facebook}}
-                          <div class="col-3 icon">
-                            <a href="https://www.facebook.com/{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/facebook.png" alt="Facebook">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}Facebook{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
-
-                        <!-- SOSYAL MEDYA BÖLÜMÜ - TikTok -->
-                        {{#if tiktok}}
-                          {{#each tiktok}}
-                          <div class="col-3 icon">
-                            <a href="https://www.tiktok.com/@{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
-                              <img src="/img/tiktok.png" alt="TikTok">
-                              <span class="mt-1 text-center small icon-label">{{#if this.label}}{{this.label}}{{else}}TikTok{{/if}}</span>
-                            </a>
-                          </div>
-                          {{/each}}
-                        {{/if}}
+                        <!-- SOSYAL MEDYA İKONLARI BURADAN KALDIRILDI -->
+                        <!-- Bu ikonlar program tarafından eklenecek -->
                     </div>
                 </div>
             </div>
@@ -858,50 +677,120 @@
                 <h2 class="mb-4" style="color: #000; text-shadow: none; position: relative; z-index: 2;">Banka Hesapları</h2>
                 
                 <div class="bank-accounts">
-                    {{#if bank_accounts}}
-                        {{#each bank_accounts}}
                         <div class="bank-card">
                             <div class="d-flex align-items-center mb-3">
-                                <img src="{{this.bank_logo}}" alt="{{this.bank_label}}" class="bank-logo">
+                                <img src="/img/banks/teb.png" alt="TEB (Türk Ekonomi Bankası)" class="bank-logo">
                                 <div>
-                                    <div class="bank-name">{{this.bank_label}}</div>
+                                    <div class="bank-name">TEB (Türk Ekonomi Bankası)</div>
                                     <div class="account-holder">
-                                        {{this.account_holder}}
-                                        <button class="copy-account-btn" onclick="copyAccountHolder('{{this.account_holder}}')">
+                                        Global Sanayi
+                                        <button class="copy-account-btn" onclick="copyAccountHolder('Global Sanayi')">
                                             <i class="fas fa-copy"></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
                             
-                            {{#each this.accounts}}
                             <div class="d-flex align-items-center mb-2 position-relative">
                                 <div class="currency-badge">
-                                {{#if this.currency}}
-                                    {{#ifEquals this.currency "TL"}}₺{{/ifEquals}}
-                                    {{#ifEquals this.currency "TRY"}}₺{{/ifEquals}}
-                                    {{#ifEquals this.currency "USD"}}${{/ifEquals}}
-                                    {{#ifEquals this.currency "EUR"}}€{{/ifEquals}}
-                                {{else}}
+                                    
                                     ₺
-                                {{/if}}
+                                    
+                                    
                                 </div>
                                 <div class="iban-container">
-                                    <input type="text" class="iban-text" id="iban-{{@../index}}-{{@index}}" value="{{this.iban}}" readonly>
-                                    <button class="copy-icon-btn" onclick="copyIban('iban-{{@../index}}-{{@index}}')">
+                                    <input type="text" class="iban-text" id="iban-0-0" value="TR0001.925053906759666e+21" readonly>
+                                    <button class="copy-icon-btn" onclick="copyIban('iban-0-0')">
                                         <i class="fas fa-copy"></i>
                                     </button>
                                 </div>
                             </div>
-                            {{/each}}
+                            <div class="d-flex align-items-center mb-2 position-relative">
+                                <div class="currency-badge">
+                                    
+                                    
+                                    $
+                                    
+                                </div>
+                                <div class="iban-container">
+                                    <input type="text" class="iban-text" id="iban-0-1" value="TR00003.74524103926075e+22" readonly>
+                                    <button class="copy-icon-btn" onclick="copyIban('iban-0-1')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2 position-relative">
+                                <div class="currency-badge">
+                                    
+                                    
+                                    
+                                    €
+                                </div>
+                                <div class="iban-container">
+                                    <input type="text" class="iban-text" id="iban-0-2" value="TR0008.336756892508476e+22" readonly>
+                                    <button class="copy-icon-btn" onclick="copyIban('iban-0-2')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        {{/each}}
-                    {{else}}
-                        <div class="no-accounts">
-                            <i class="fas fa-exclamation-circle d-block mb-3" style="font-size: 3rem;"></i>
-                            <h4>Bu firma için tanımlanmış banka hesabı bulunmamaktadır.</h4>
+                        <div class="bank-card">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="/img/banks/turkiyefinans.png" alt="Türkiye Finans" class="bank-logo">
+                                <div>
+                                    <div class="bank-name">Türkiye Finans</div>
+                                    <div class="account-holder">
+                                        Global Sanayi
+                                        <button class="copy-account-btn" onclick="copyAccountHolder('Global Sanayi')">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex align-items-center mb-2 position-relative">
+                                <div class="currency-badge">
+                                    
+                                    ₺
+                                    
+                                    
+                                </div>
+                                <div class="iban-container">
+                                    <input type="text" class="iban-text" id="iban-1-0" value="TR0009.811620049406518e+22" readonly>
+                                    <button class="copy-icon-btn" onclick="copyIban('iban-1-0')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2 position-relative">
+                                <div class="currency-badge">
+                                    
+                                    
+                                    $
+                                    
+                                </div>
+                                <div class="iban-container">
+                                    <input type="text" class="iban-text" id="iban-1-1" value="TR0007.943795794177018e+22" readonly>
+                                    <button class="copy-icon-btn" onclick="copyIban('iban-1-1')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-2 position-relative">
+                                <div class="currency-badge">
+                                    
+                                    
+                                    
+                                    €
+                                </div>
+                                <div class="iban-container">
+                                    <input type="text" class="iban-text" id="iban-1-2" value="TR006.8735010899978095e+22" readonly>
+                                    <button class="copy-icon-btn" onclick="copyIban('iban-1-2')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    {{/if}}
                 </div>
             </div>
         </div>
@@ -918,36 +807,30 @@
                     <div class="bank-card">
                         <div class="bank-name">Firma Ünvanı</div>
                         <div class="iban-container">
-                            <div class="iban-text">{{#if firma_unvan}}{{firma_unvan}}{{else}}Belirtilmemiş{{/if}}</div>
-                            {{#if firma_unvan}}
-                            <button class="copy-btn" onclick="copyTaxInfo('{{firma_unvan}}')">
+                            <div class="iban-text">Global Sanayi A.Ş.</div>
+                            <button class="copy-btn" onclick="copyTaxInfo('Global Sanayi A.Ş.')">
                                 <i class="fas fa-copy"></i>
                             </button>
-                            {{/if}}
                         </div>
                     </div>
                     
                     <div class="bank-card">
                         <div class="bank-name">Vergi Numarası</div>
                         <div class="iban-container">
-                            <div class="iban-text">{{#if firma_vergi_no}}{{firma_vergi_no}}{{else}}Belirtilmemiş{{/if}}</div>
-                            {{#if firma_vergi_no}}
-                            <button class="copy-btn" onclick="copyTaxInfo('{{firma_vergi_no}}')">
+                            <div class="iban-text">9680917026</div>
+                            <button class="copy-btn" onclick="copyTaxInfo('9680917026')">
                                 <i class="fas fa-copy"></i>
                             </button>
-                            {{/if}}
                         </div>
                     </div>
                     
                     <div class="bank-card">
                         <div class="bank-name">Vergi Dairesi</div>
                         <div class="iban-container">
-                            <div class="iban-text">{{#if vergi_dairesi}}{{vergi_dairesi}}{{else}}Belirtilmemiş{{/if}}</div>
-                            {{#if vergi_dairesi}}
-                            <button class="copy-btn" onclick="copyTaxInfo('{{vergi_dairesi}}')">
+                            <div class="iban-text">Merkez Vergi Dairesi</div>
+                            <button class="copy-btn" onclick="copyTaxInfo('Merkez Vergi Dairesi')">
                                 <i class="fas fa-copy"></i>
                             </button>
-                            {{/if}}
                         </div>
                     </div>
                 </div>
@@ -960,10 +843,10 @@
                 <a href="#" class="back-button" onclick="showMainContent(event)">
                     <i class="fas fa-arrow-left"></i> Geri Dön
                 </a>
-                <h2 class="mb-4" style="color: #000; text-shadow: none; position: relative; z-index: 2;">{{#if firma_hakkinda_baslik}}{{firma_hakkinda_baslik}}{{else}}Hakkımızda{{/if}}</h2>
+                <h2 class="mb-4" style="color: #000; text-shadow: none; position: relative; z-index: 2;">Hakkımızda</h2>
                 
                 <div class="about-content" style="word-break: break-word; overflow-wrap: break-word; white-space: normal; overflow: auto; max-height: 70vh; text-overflow: ellipsis; background-color: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); position: relative; z-index: 2;">
-                    {{firma_hakkinda}}
+                    Global Sanayi olarak müşterilerimize en kaliteli hizmeti sunmak için çalışıyoruz. 2025 yılından bu yana sektörde lider konumdayız.
                 </div>
             </div>
         </div>
@@ -973,11 +856,11 @@
     <div class="share-menu" id="share-menu" onclick="event.stopPropagation()">
         <h3>Paylaş</h3>
         <div class="icon-container">
-            <a href="https://wa.me/?text=https://sanalkartvizitim.com/{{slug}}" target="_blank"><i class="fab fa-whatsapp"></i></a>
-            <a href="https://twitter.com/intent/tweet?url=https://sanalkartvizitim.com/{{slug}}" target="_blank"><i class="fab fa-twitter"></i></a>
-            <a href="https://www.facebook.com/sharer/sharer.php?u=https://sanalkartvizitim.com/{{slug}}" target="_blank"><i class="fab fa-facebook"></i></a>
-            <a href="https://www.messenger.com/t/?link=https://sanalkartvizitim.com/{{slug}}" target="_blank"><i class="fab fa-facebook-messenger"></i></a>
-            <a href="mailto:?subject={{firma_adi}}&body=https://sanalkartvizitim.com/{{slug}}" target="_blank"><i class="far fa-envelope"></i></a>
+            <a href="https://wa.me/?text=https://sanalkartvizitim.com/global-sanayi" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://twitter.com/intent/tweet?url=https://sanalkartvizitim.com/global-sanayi" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://sanalkartvizitim.com/global-sanayi" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.messenger.com/t/?link=https://sanalkartvizitim.com/global-sanayi" target="_blank"><i class="fab fa-facebook-messenger"></i></a>
+            <a href="mailto:?subject=Global Sanayi&body=https://sanalkartvizitim.com/global-sanayi" target="_blank"><i class="far fa-envelope"></i></a>
         </div>
         <div class="divider"></div>
         <div class="copy-link" onclick="copyLink()">
@@ -1087,7 +970,7 @@
         }
 
         function copyLink() {
-            navigator.clipboard.writeText('https://sanalkartvizitim.com/{{slug}}');
+            navigator.clipboard.writeText('https://sanalkartvizitim.com/global-sanayi');
             alert('Bağlantı kopyalandı!');
         }
         
@@ -1212,4 +1095,5 @@
             });
         }
     </script>
-</html>
+</body>
+</html> 
