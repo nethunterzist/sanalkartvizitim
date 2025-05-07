@@ -5,6 +5,10 @@ import * as QRCode from 'qrcode';
 
 const prisma = new PrismaClient();
 
+// UYARI: Bu script sadece local geliştirme için kullanılmalıdır. Vercel gibi sunucusuz ortamlarda çalışmaz!
+// QR kodlarını dosya sistemine yazmak Vercel'de mümkün değildir.
+// Sadece toDataURL ile base64 olarak QR kodu üretip kullanın.
+
 // QR kod oluşturma fonksiyonu
 async function generateQRCode(slug: string, domain: string = 'sanalkartvizitim.com'): Promise<string> {
   const url = `https://${domain}/${slug}`;

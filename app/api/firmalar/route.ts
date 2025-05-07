@@ -4,7 +4,7 @@ import { generateHtmlForFirma } from '@/app/lib/htmlGenerator';
 import * as fs from 'fs';
 import * as path from 'path';
 import { generateVCard } from '@/app/lib/vcardGenerator';
-import { generateQRCode } from '@/lib/qrCodeGenerator';
+import { generateQRCodeDataUrl } from '@/lib/qrCodeGenerator';
 
 // Sosyal medya veri yapısı
 interface SocialMediaData {
@@ -368,8 +368,8 @@ export async function POST(req: NextRequest) {
       console.log(`HTML oluşturuldu: ${refreshedFirma.slug}`);
       
       // QR kod oluştur
-      const qrCodePath = await generateQRCode(refreshedFirma.slug);
-      console.log('QR kod oluşturuldu:', qrCodePath);
+      const qrCodeDataUrl = await generateQRCodeDataUrl(refreshedFirma.slug);
+      console.log('QR kod base64 üretildi:', qrCodeDataUrl ? 'OK' : 'HATA');
       
       // vCard oluşturmak için firma verisini hazırla
       const vcardData = {
@@ -1018,8 +1018,8 @@ export async function PUT(req: NextRequest) {
       
       // QR kod güncelle (eğer slug değiştiyse)
       if (slug !== existingFirm.slug) {
-        const qrCodePath = await generateQRCode(refreshedFirma.slug);
-        console.log('QR kod güncellendi:', qrCodePath);
+        const qrCodeDataUrl = await generateQRCodeDataUrl(refreshedFirma.slug);
+        console.log('QR kod base64 güncellendi:', qrCodeDataUrl ? 'OK' : 'HATA');
       }
       
       // vCard güncelle
