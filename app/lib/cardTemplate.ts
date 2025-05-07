@@ -1,4 +1,4 @@
-const cardTemplate = `
+export const cardTemplate = `
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -87,196 +87,112 @@ const cardTemplate = `
             border-radius: 50%;
             transform: scale(1.1);
         }
-        .contact-info {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .social-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        .social-link {
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f8f9fa;
-            border-radius: 25px;
-            text-decoration: none;
-            color: #333;
-            transition: all 0.3s ease;
-        }
-        .social-link:hover {
-            background-color: #e9ecef;
-            transform: translateY(-2px);
-        }
-        .social-link i {
-            margin-right: 10px;
-            font-size: 20px;
-        }
-        .rehber-icon img {
-            width: 100%;
-            max-width: none;
-            transform: scale(3.3);
-            margin: 10px 0;
-        }
         .icon img {
             width: 100%;
             max-width: 70px;
             margin: 10px 0;
         }
-        .logos {
+        .icon-label {
+            font-size: 14px;
+            color: #333;
+            margin-top: 5px;
+            word-break: break-word;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .icon a {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            gap: 20px;
-            margin-top: 20px;
+            text-decoration: none;
         }
-        .rizanka-logo {
-            border-right: 1px solid #666;
-            padding-right: 10px;
-        }
-        .logos img {
-            max-width: 100px;
-            height: auto;
-        }
-        .youtube-section {
-            margin-top: -40px;
-            text-align: center;
-        }
-        .youtube-section img {
-            width: 100%;
-            max-width: 120px;
-            margin: 0 auto;
-        }
-        .share-menu {
-            position: fixed;
-            bottom: -400px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 450px;
-            background-color: #fff;
-            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            transition: bottom 0.3s ease-in-out;
-            padding: 20px;
-            text-align: center;
-        }
-        .share-menu.open {
-            bottom: 0;
-        }
-        .share-menu h3 {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        .share-menu .icon-container {
+        .social-media {
+            margin-top: 15px;
             display: flex;
             justify-content: space-around;
-            align-items: center;
-            margin-bottom: 20px;
         }
-        .share-menu .icon-container i {
-            font-size: 30px;
-            background-color: #f2f2f2;
+        .social-link {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            padding: 15px;
-            color: #555;
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-        }
-        .share-menu .icon-container i:hover {
-            transform: scale(1.1);
-            background-color: #e0e0e0;
-        }
-        .share-menu .divider {
-            border-top: 1px solid #e0e0e0;
-            margin: 20px 0;
-        }
-        .share-menu .copy-link {
+            background-color: #336B87;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #000;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .share-menu .copy-link i {
-            font-size: 18px;
-            background-color: #f2f2f2;
-            border-radius: 50%;
-            padding: 10px;
-            color: #555;
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            background-color: #90AFC5;
         }
-        .copy-link:hover i {
-            background-color: #e0e0e0;
+        .social-link img {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) invert(1);
         }
-        /* ... (devamı: index-template.html'ün tamamı buraya eklenecek) ... */
     </style>
 </head>
 <body>
     <div class="main-container">
         <div class="background">
             <div class="card-content">
-                {{#if firma_logo}}
                 <div class="profile-container">
-                    <img src="{{firma_logo}}" alt="{{firma_adi}}" class="profile-image">
+                    {{#if profil_foto}}
+                    <img src="{{profil_foto}}" class="profile-image" alt="{{firma_adi}}">
+                    {{else}}
+                    <img src="/img/profile-default.png" class="profile-image" alt="{{firma_adi}}">
+                    {{/if}}
                 </div>
-                {{/if}}
-                
-                <h1>{{firma_adi}}</h1>
-                {{#if yetkili_adi}}
-                <h2>{{yetkili_adi}}</h2>
-                {{/if}}
-                {{#if yetkili_pozisyon}}
-                <p>{{yetkili_pozisyon}}</p>
-                {{/if}}
 
-                {{#if communication}}
-                <div class="contact-info">
-                    <h3>İletişim Bilgileri</h3>
-                    {{#each communication}}
-                    <p>
-                        <strong>{{this.tip}}:</strong> {{this.deger}}
-                        {{#if this.label}}({{this.label}}){{/if}}
-                    </p>
-                    {{/each}}
+                <div class="container">
+                    <div class="row justify-content-center mb-2">
+                        <div class="col-12 text-center">
+                            <h1 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 5px; color: #000;">{{firma_adi}}</h1>
+                            {{#if yetkili_adi}}
+                            <h1 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; color: #000;">{{yetkili_adi}}</h1>
+                            {{/if}}
+                            {{#if yetkili_pozisyon}}
+                            <p style="font-size: 1rem; color: #666;">{{yetkili_pozisyon}}</p>
+                            {{/if}}
+                        </div>
+                    </div>
                 </div>
-                {{/if}}
 
-                {{#if social_media}}
-                <div class="social-links">
-                    {{#each social_media}}
-                    <a href="{{this.url}}" target="_blank" class="social-link">
-                        <i class="fab fa-{{this.platform}}"></i>
-                        {{this.platform}}
-                        {{#if this.label}}({{this.label}}){{/if}}
-                    </a>
-                    {{/each}}
+                <div class="container">
+                    <div class="row justify-content-center" id="icons-container">
+                        {{#if social_media}}
+                            {{#each social_media}}
+                            <div class="col-3 icon">
+                                <a href="{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
+                                    <img src="{{this.icon}}" alt="{{this.label}}">
+                                    <span class="mt-1 text-center small icon-label">{{this.label}}</span>
+                                </a>
+                            </div>
+                            {{/each}}
+                        {{/if}}
+                        
+                        {{#if communication}}
+                            {{#each communication}}
+                            <div class="col-3 icon">
+                                <a href="{{this.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
+                                    <img src="{{this.icon}}" alt="{{this.label}}">
+                                    <span class="mt-1 text-center small icon-label">{{this.label}}</span>
+                                </a>
+                            </div>
+                            {{/each}}
+                        {{/if}}
+                    </div>
                 </div>
-                {{/if}}
-
-                {{#if website}}
-                <div class="contact-info">
-                    <h3>Web Siteleri</h3>
-                    {{#each website}}
-                    <p><a href="{{this}}" target="_blank">{{this}}</a></p>
-                    {{/each}}
-                </div>
-                {{/if}}
             </div>
         </div>
     </div>
 </body>
-</html>`;
-
-export default cardTemplate; 
+</html>`; 
