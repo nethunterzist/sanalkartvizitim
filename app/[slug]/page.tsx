@@ -74,6 +74,7 @@ export default async function KartvizitPage({ params }: { params: { slug: string
 
         // JSON verisini parse et
         const data = await response.json();
+        console.log('API JSON:', data);
         
         // Handlebars ile template'i derle
         const compiledTemplate = handlebars.compile(cardTemplate);
