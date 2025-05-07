@@ -1,13 +1,9 @@
 import multer from 'multer';
 import { Request } from 'express';
 import path from 'path';
-import fs from 'fs';
 
 // Upload klasörünü oluştur (yoksa)
 const uploadDir = path.join(process.cwd(), 'public/uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
 
 // Dosya depolama konfigürasyonu
 const storage = multer.diskStorage({

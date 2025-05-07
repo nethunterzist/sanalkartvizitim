@@ -595,24 +595,7 @@ export async function generateHtml(firma: FirmaHTMLProps): Promise<string> {
         console.error(`UYARI: Oluşturulan HTML içeriği çok kısa (${htmlContent.length} karakter), şablon düzgün çalışmamış olabilir!`);
       }
       
-      // Firma dizini oluştur
-      const firmaDir = path.join(process.cwd(), 'public', firma.slug);
-      console.log(`Firma dizini kontrol ediliyor: ${firmaDir}`);
-      
-      if (!fs.existsSync(firmaDir)) {
-        console.log(`Firma dizini bulunamadı, oluşturuluyor...`);
-        fs.mkdirSync(firmaDir, { recursive: true });
-        console.log(`Firma dizini başarıyla oluşturuldu.`);
-      } else {
-        console.log(`Firma dizini zaten mevcut, yeni dosyalar mevcut dizine yazılacak.`);
-      }
-      
-      // HTML dosyasını kaydet
-      const htmlPath = path.join(firmaDir, 'index.html');
-      fs.writeFileSync(htmlPath, htmlContent);
-      console.log(`HTML dosyası başarıyla oluşturuldu: ${htmlPath}`);
-      
-      return htmlPath;
+      return htmlContent;
     } catch (error) {
       console.error('Şablon işleme hatası:', error);
       throw error;
@@ -810,10 +793,10 @@ export async function generateHtmlForFirma(firma: any, oldSlug?: string): Promis
     };
     
     // generateHtml fonksiyonunu çağırarak HTML içeriğini oluştur
-    const htmlFilePath = await generateHtml(templateData);
-    console.log('HTML oluşturuldu, yol:', htmlFilePath);
+    const htmlContent = await generateHtml(templateData);
+    console.log('HTML oluşturuldu, içerik:', htmlContent);
     
-    return htmlFilePath;
+    return htmlContent;
   } catch (error) {
     console.error('HTML oluşturulurken hata:', error);
     return '';
