@@ -370,26 +370,6 @@ export async function POST(req: NextRequest) {
       // QR kod oluştur
       const qrCodeDataUrl = await generateQRCodeDataUrl(refreshedFirma.slug);
       console.log('QR kod base64 üretildi:', qrCodeDataUrl ? 'OK' : 'HATA');
-      
-      // vCard oluşturmak için firma verisini hazırla
-      const vcardData = {
-        firma_adi: refreshedFirma.firma_adi,
-        telefon: refreshedFirma.telefon || undefined,
-        eposta: refreshedFirma.eposta || undefined,
-        website: refreshedFirma.website || undefined,
-        instagram: refreshedFirma.instagram || undefined,
-        youtube: refreshedFirma.youtube || undefined,
-        linkedin: refreshedFirma.linkedin || undefined,
-        twitter: refreshedFirma.twitter || undefined,
-        facebook: refreshedFirma.facebook || undefined,
-        tiktok: refreshedFirma.tiktok || undefined,
-        slug: refreshedFirma.slug,
-        communication_data: refreshedFirma.communication_data || null,
-        social_media_data: refreshedFirma.social_media_data || null
-      };
-      
-      const vcardPath = await generateVCard(vcardData);
-      console.log('vCard dosyası oluşturuldu:', vcardPath);
     } catch (error) {
       console.error('HTML/vCard oluşturulurken hata:', error);
       // HTML oluşturma hatası, firma oluşturma işlemini engellemeyecek
@@ -1021,26 +1001,6 @@ export async function PUT(req: NextRequest) {
         const qrCodeDataUrl = await generateQRCodeDataUrl(refreshedFirma.slug);
         console.log('QR kod base64 güncellendi:', qrCodeDataUrl ? 'OK' : 'HATA');
       }
-      
-      // vCard güncelle
-      const vcardData = {
-        firma_adi: refreshedFirma.firma_adi,
-        telefon: refreshedFirma.telefon || undefined,
-        eposta: refreshedFirma.eposta || undefined,
-        website: refreshedFirma.website || undefined,
-        instagram: refreshedFirma.instagram || undefined,
-        youtube: refreshedFirma.youtube || undefined,
-        linkedin: refreshedFirma.linkedin || undefined,
-        twitter: refreshedFirma.twitter || undefined,
-        facebook: refreshedFirma.facebook || undefined,
-        tiktok: refreshedFirma.tiktok || undefined,
-        slug: refreshedFirma.slug,
-        communication_data: refreshedFirma.communication_data || null,
-        social_media_data: refreshedFirma.social_media_data || null
-      };
-      
-      const vcardPath = await generateVCard(vcardData);
-      console.log('vCard dosyası güncellendi:', vcardPath);
     } catch (error) {
       console.error('HTML/vCard güncellenirken hata:', error);
       // HTML oluşturma hatası, firma güncelleme işlemini engellemeyecek

@@ -1,6 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
-
 export interface VCardData {
   firma_adi: string;
   telefon?: string | string[];
@@ -29,15 +26,6 @@ export async function generateVCard(data: VCardData): Promise<string> {
       .replace(/\s+/g, '-')
       .toLowerCase();
 
-    // Dizin kontrolü
-    const publicDir = path.join(process.cwd(), 'public');
-    const firmaDir = path.join(publicDir, data.slug);
-    
-    // Dizin yoksa oluştur
-    if (!fs.existsSync(firmaDir)) {
-      fs.mkdirSync(firmaDir, { recursive: true });
-    }
-    
     // İletişim verilerini hazırla
     let telefonlar: string[] = [];
     let epostalar: string[] = [];
@@ -360,14 +348,7 @@ FN:${data.yetkili_adi ? data.yetkili_adi : data.firma_adi}
     // vCard'ı tamamla
     vCardContent += 'END:VCARD';
 
-    // Dosya yolu
-    const vcfPath = path.join(firmaDir, `${safeFileName}.vcf`);
-    const vcfRelativePath = `/${data.slug}/${safeFileName}.vcf`;
-    
-    // Dosyayı kaydet - sonundaki % karakterinin eklenmemesi için trim() kullanıyoruz
-    fs.writeFileSync(vcfPath, vCardContent.trim());
-    
-    return vcfRelativePath;
+    return vCardContent;
   } catch (error) {
     console.error('vCard dosyası oluşturulurken hata:', error);
     return '';

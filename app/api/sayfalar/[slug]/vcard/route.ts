@@ -1,19 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/app/lib/db';
-
-function generateVCard(firma: any): string {
-  // Temel vCard alanları
-  let vcard = `BEGIN:VCARD\nVERSION:3.0\n`;
-  vcard += `FN:${firma.firma_adi || ''}\n`;
-  vcard += `ORG:${firma.firma_adi || ''}\n`;
-  if (firma.yetkili_adi) vcard += `N:${firma.yetkili_adi}\n`;
-  if (firma.telefon) vcard += `TEL;TYPE=WORK,VOICE:${firma.telefon}\n`;
-  if (firma.eposta) vcard += `EMAIL;TYPE=WORK:${firma.eposta}\n`;
-  if (firma.website) vcard += `URL:${firma.website}\n`;
-  if (firma.adres) vcard += `ADR;TYPE=WORK:${firma.adres}\n`;
-  vcard += `END:VCARD`;
-  return vcard;
-}
+import { generateVCard } from '@/app/lib/vcardGenerator';
 
 export async function GET(
   request: NextRequest,
@@ -25,7 +12,22 @@ export async function GET(
     if (!firma) {
       return NextResponse.json({ error: 'Firma bulunamadı' }, { status: 404 });
     }
-    const vcardContent = generateVCard(firma);
+    const vcardContent = await generateVCard({
+      firma_adi: firma.firma_adi,
+      telefon: firma.telefon ?? undefined,
+      eposta: firma.eposta ?? undefined,
+      website: firma.website ?? undefined,
+      instagram: firma.instagram ?? undefined,
+      youtube: firma.youtube ?? undefined,
+      linkedin: firma.linkedin ?? undefined,
+      twitter: firma.twitter ?? undefined,
+      facebook: firma.facebook ?? undefined,
+      tiktok: firma.tiktok ?? undefined,
+      slug: firma.slug,
+      communication_data: firma.communication_data ?? undefined,
+      social_media_data: firma.social_media_data ?? undefined,
+      yetkili_adi: firma.yetkili_adi ?? undefined
+    });
     return new NextResponse(vcardContent, {
       status: 200,
       headers: {
