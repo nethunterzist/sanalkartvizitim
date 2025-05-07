@@ -367,7 +367,7 @@ export const cardTemplate = `
                                         {{#if this.currency}}
                                             {{#ifEquals this.currency "TL"}}₺{{/ifEquals}}
                                             {{#ifEquals this.currency "TRY"}}₺{{/ifEquals}}
-                                            {{#ifEquals this.currency "USD"}}${{/ifEquals}}
+                                            {{#ifEquals this.currency "USD"}}&#36;{{/ifEquals}}
                                             {{#ifEquals this.currency "EUR"}}€{{/ifEquals}}
                                         {{else}}
                                             ₺
