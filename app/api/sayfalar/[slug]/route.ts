@@ -54,40 +54,20 @@ export async function GET(
 ) {
   try {
     const slug = params.slug;
-    console.log(`[${slug}] HTML içeriği getirme isteği alındı`);
-    console.log(`[${slug}] İstek detayları:`, {
-      url: request.url,
-      method: request.method,
-      headers: Object.fromEntries(request.headers.entries())
-    });
+    console.log(`[${slug}] HTML/JSON içeriği getirme isteği alındı`);
     
-    // Önce firmayı kontrol et
-    console.log(`[${slug}] Veritabanı sorgusu başlıyor...`);
-    const firma = await prisma.firmalar.findFirst({
-      where: { slug }
-    });
-    console.log(`[${slug}] Veritabanı sorgusu tamamlandı:`, firma ? 'Firma bulundu' : 'Firma bulunamadı');
-    
+    // Firma verisini çek
+    const firma = await prisma.firmalar.findFirst({ where: { slug } });
     if (!firma) {
-      console.log(`[${slug}] Firma bulunamadı`);
-      return NextResponse.json(
-        { error: 'Firma bulunamadı' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Firma bulunamadı' }, { status: 404 });
     }
-    
+
     // Website alanını dizi olarak hazırla
     let websiteArray: string[] = [];
     if (firma.website) {
       if (typeof firma.website === 'string' && firma.website.startsWith('[')) {
-        try {
-          websiteArray = JSON.parse(firma.website);
-        } catch (e) {
-          websiteArray = [firma.website];
-        }
-      } else {
-        websiteArray = [firma.website];
-      }
+        try { websiteArray = JSON.parse(firma.website); } catch { websiteArray = [firma.website]; }
+      } else { websiteArray = [firma.website]; }
     }
     // Sosyal medya ve iletişim alanlarını diziye çevir
     let socialMediaArray: any[] = [];
@@ -106,9 +86,7 @@ export async function GET(
             });
           }
         }
-      } catch (e) {
-        socialMediaArray = [];
-      }
+      } catch { socialMediaArray = []; }
     }
     let communicationArray: any[] = [];
     if (firma.communication_data) {
@@ -125,28 +103,47 @@ export async function GET(
             });
           }
         }
-      } catch (e) {
-        communicationArray = [];
-      }
+      } catch { communicationArray = []; }
     }
-    // HTML'i oluştur
-    const compiledTemplate = Handlebars.compile(pageTemplate);
-    const html = compiledTemplate({
-      firma_adi: firma.firma_adi,
-      yetkili_adi: firma.yetkili_adi,
-      yetkili_pozisyon: firma.yetkili_pozisyon,
-      slug: firma.slug,
-      website: websiteArray,
-      firma_logo: firma.firma_logo,
-      social_media: socialMediaArray,
-      communication: communicationArray
-    });
-    return new NextResponse(html, {
-      headers: {
-        'Content-Type': 'text/html',
-        'Cache-Control': 'public, max-age=86400, stale-while-revalidate'
-      }
-    });
+
+    // Accept header'ına göre response tipi belirle
+    const accept = request.headers.get('accept') || '';
+    if (accept.includes('application/json') || accept.includes('*/')) {
+      // JSON response
+      return NextResponse.json({
+        firma_adi: firma.firma_adi,
+        yetkili_adi: firma.yetkili_adi,
+        yetkili_pozisyon: firma.yetkili_pozisyon,
+        slug: firma.slug,
+        website: websiteArray,
+        firma_logo: firma.firma_logo,
+        social_media: socialMediaArray,
+        communication: communicationArray,
+        firma_hakkinda: firma.firma_hakkinda,
+        firma_hakkinda_baslik: firma.firma_hakkinda_baslik,
+        katalog: firma.katalog,
+        profil_foto: firma.profil_foto
+      });
+    } else {
+      // HTML response
+      const compiledTemplate = Handlebars.compile(pageTemplate);
+      const html = compiledTemplate({
+        firma_adi: firma.firma_adi,
+        yetkili_adi: firma.yetkili_adi,
+        yetkili_pozisyon: firma.yetkili_pozisyon,
+        slug: firma.slug,
+        website: websiteArray,
+        firma_logo: firma.firma_logo,
+        social_media: socialMediaArray,
+        communication: communicationArray
+      });
+      return new NextResponse(html, {
+        headers: {
+          'Content-Type': 'text/html',
+          'Cache-Control': 'public, max-age=86400, stale-while-revalidate'
+        }
+      });
+    }
   } catch (error) {
     console.error('Sayfa içeriği oluşturulurken hata:', error);
     return NextResponse.json({ error: 'Sayfa içeriği oluşturulurken bir hata oluştu' }, { status: 500 });
