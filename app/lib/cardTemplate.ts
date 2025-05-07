@@ -194,7 +194,6 @@ const cardTemplate = `
 <body>
     <!-- ... (devamı: index-template.html'ün tamamı buraya eklenecek) ... -->
 </body>
-</html>
-`;
+</html>`;
 
 export default cardTemplate; 
