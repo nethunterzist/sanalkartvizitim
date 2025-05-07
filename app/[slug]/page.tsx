@@ -1,8 +1,7 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import handlebars from 'handlebars';
-import fs from 'fs';
-import path from 'path';
+import cardTemplate from '../lib/cardTemplate';
 
 // Handlebars helper fonksiyonunu kaydet
 handlebars.registerHelper('ifEquals', function(this: any, arg1: any, arg2: any, options: any) {
@@ -63,12 +62,8 @@ export default async function KartvizitPage({ params }: { params: { slug: string
 
         const data = await response.json();
         
-        // HTML template'ini oku
-        const templatePath = path.join(process.cwd(), 'templates', 'index-template.html');
-        const template = fs.readFileSync(templatePath, 'utf-8');
-        
         // Handlebars ile template'i derle
-        const compiledTemplate = handlebars.compile(template);
+        const compiledTemplate = handlebars.compile(cardTemplate);
         
         // Template'i veri ile doldur
         const html = compiledTemplate(data);
