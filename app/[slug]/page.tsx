@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 
 // Handlebars helper fonksiyonunu kaydet
-handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
+handlebars.registerHelper('ifEquals', function(this: any, arg1: any, arg2: any, options: any) {
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
 });
 
