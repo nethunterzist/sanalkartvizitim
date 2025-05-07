@@ -204,6 +204,28 @@ export const cardTemplate = `
         .copy-btn:hover .copy-icon {
             opacity: 1;
         }
+        .bank-accounts-list {
+            margin-top: 10px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        .bank-card {
+            background: #fafbfc;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            padding: 16px 14px;
+            margin-bottom: 18px;
+        }
+        .iban-text {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 6px 8px;
+            font-family: monospace;
+            font-size: 0.98em;
+            width: 100%;
+            outline: none;
+        }
     </style>
 </head>
 <body>
@@ -266,7 +288,7 @@ export const cardTemplate = `
                         {{/if}}
                         {{#if iban}}
                             <div class="col-3 icon">
-                                <a href="#" class="d-flex flex-column align-items-center text-decoration-none">
+                                <a href="#" onclick="showBankPopup(event)" class="d-flex flex-column align-items-center text-decoration-none">
                                     <img src="{{iban.icon}}" alt="{{iban.label}}">
                                     <span class="mt-1 text-center small icon-label">{{iban.label}}</span>
                                 </a>
@@ -316,11 +338,51 @@ export const cardTemplate = `
     <div id="about-popup" class="custom-popup-overlay" style="display:none;">
         <div class="custom-popup-content">
             <button class="custom-popup-close" onclick="closeAboutPopup()">&times;</button>
-            <h2 style="display: flex; align-items: center; justify-content: space-between;">
-                Hakkımızda
-                <button class="copy-btn" onclick="copyToClipboard(document.querySelector('.about-content').innerText, event)" title="Kopyala"><img src='/img/paylas.png' class='copy-icon'></button>
-            </h2>
+            <h2>Hakkımızda</h2>
             <div class="about-content">{{about.content}}</div>
+        </div>
+    </div>
+
+    <!-- Banka Hesapları Popup -->
+    <div id="bank-popup" class="custom-popup-overlay" style="display:none;">
+        <div class="custom-popup-content" style="max-width: 500px; width: 95%;">
+            <button class="custom-popup-close" onclick="closeBankPopup()">&times;</button>
+            <h2>Banka Hesapları</h2>
+            <div class="bank-accounts-list">
+                {{#if iban.value}}
+                    {{#each (parseBankAccounts iban.value) as |bank|}}
+                        <div class="bank-card">
+                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                {{#if bank.bank_logo}}
+                                    <img src="{{bank.bank_logo}}" alt="{{bank.bank_label}}" style="width: 36px; height: 36px; object-fit: contain; margin-right: 10px;">
+                                {{/if}}
+                                <div>
+                                    <div style="font-weight: bold;">{{bank.bank_label}}</div>
+                                    <div style="font-size: 0.95em; color: #666;">{{bank.account_holder}}</div>
+                                </div>
+                            </div>
+                            {{#each bank.accounts}}
+                                <div style="display: flex; align-items: center; margin-bottom: 6px;">
+                                    <span style="display: inline-block; width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #FFD700, #b8860b); color: #fff; font-weight: bold; display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+                                        {{#if this.currency}}
+                                            {{#ifEquals this.currency "TL"}}₺{{/ifEquals}}
+                                            {{#ifEquals this.currency "TRY"}}₺{{/ifEquals}}
+                                            {{#ifEquals this.currency "USD"}}${{/ifEquals}}
+                                            {{#ifEquals this.currency "EUR"}}€{{/ifEquals}}
+                                        {{else}}
+                                            ₺
+                                        {{/if}}
+                                    </span>
+                                    <input type="text" class="iban-text" value="{{this.iban}}" readonly style="flex:1; padding: 6px 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.98em; margin-right: 6px;">
+                                    <button class="copy-btn" onclick="copyToClipboard('{{this.iban}}', event)" title="Kopyala"><img src='/img/paylas.png' class='copy-icon'></button>
+                                </div>
+                            {{/each}}
+                        </div>
+                    {{/each}}
+                {{else}}
+                    <div style="text-align:center; color:#888;">Tanımlı banka hesabı bulunamadı.</div>
+                {{/if}}
+            </div>
         </div>
     </div>
 
@@ -346,6 +408,19 @@ export const cardTemplate = `
             const btn = event.currentTarget;
             btn.style.opacity = '0.5';
             setTimeout(() => { btn.style.opacity = '1'; }, 700);
+        });
+    }
+    function showBankPopup(e) {
+        e.preventDefault();
+        document.getElementById('bank-popup').style.display = 'flex';
+    }
+    function closeBankPopup() {
+        document.getElementById('bank-popup').style.display = 'none';
+    }
+    // Handlebars helper: JSON stringi parse et
+    if (typeof Handlebars !== 'undefined') {
+        Handlebars.registerHelper('parseBankAccounts', function(jsonStr) {
+            try { return JSON.parse(jsonStr); } catch { return []; }
         });
     }
     </script>
