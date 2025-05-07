@@ -32,12 +32,14 @@ export default async function FirmaSayfasi({ params }: { params: { slug: string 
   const { slug } = params;
   
   try {
-    console.log(`[${slug}] Kartvizit sayfası yükleniyor`);
+    console.log(`[${slug}] Kartvizit sayfası yükleniyor - Başlangıç`);
     
     // Firmayı veritabanından kontrol et
+    console.log(`[${slug}] Veritabanı sorgusu başlıyor...`);
     const firma = await prisma.firmalar.findFirst({
       where: { slug }
     });
+    console.log(`[${slug}] Veritabanı sorgusu tamamlandı:`, firma ? 'Firma bulundu' : 'Firma bulunamadı');
     
     if (!firma) {
       console.log(`[${slug}] Firma veritabanında bulunamadı`);
@@ -49,29 +51,51 @@ export default async function FirmaSayfasi({ params }: { params: { slug: string 
       ? `https://${process.env.VERCEL_URL}`
       : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
       
-    console.log(`[${slug}] API URL: ${baseUrl}/api/sayfalar/${slug}`);
+    const apiUrl = `${baseUrl}/api/sayfalar/${slug}`;
+    console.log(`[${slug}] API URL: ${apiUrl}`);
+    console.log(`[${slug}] Environment değişkenleri:`, {
+      VERCEL_URL: process.env.VERCEL_URL,
+      NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
+      NODE_ENV: process.env.NODE_ENV
+    });
     
-    const response = await fetch(`${baseUrl}/api/sayfalar/${slug}`, {
+    console.log(`[${slug}] API isteği gönderiliyor...`);
+    const response = await fetch(apiUrl, {
       cache: 'no-store',
       headers: {
         'Accept': 'text/html'
       }
     });
+    console.log(`[${slug}] API yanıtı alındı:`, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: Object.fromEntries(response.headers.entries())
+    });
     
     if (!response.ok) {
-      console.error(`[${slug}] HTML içeriği alınamadı: ${response.status}`);
-      throw new Error(`HTML içeriği alınamadı: ${response.status}`);
+      const errorText = await response.text();
+      console.error(`[${slug}] HTML içeriği alınamadı:`, {
+        status: response.status,
+        statusText: response.statusText,
+        errorText
+      });
+      throw new Error(`HTML içeriği alınamadı: ${response.status} - ${errorText}`);
     }
     
     const htmlContent = await response.text();
+    console.log(`[${slug}] HTML içeriği alındı, uzunluk: ${htmlContent.length} karakter`);
     
     if (!htmlContent || htmlContent.length < 100) {
-      console.error(`[${slug}] HTML içeriği geçersiz veya çok kısa`);
+      console.error(`[${slug}] HTML içeriği geçersiz veya çok kısa:`, {
+        contentLength: htmlContent.length,
+        contentPreview: htmlContent.substring(0, 100)
+      });
       throw new Error('HTML içeriği geçersiz');
     }
     
     // Görüntülenme sayısını artır
     try {
+      console.log(`[${slug}] Görüntülenme sayısı güncelleniyor...`);
       await prisma.firmalar.update({
         where: { id: firma.id },
         data: {
@@ -86,11 +110,18 @@ export default async function FirmaSayfasi({ params }: { params: { slug: string 
     }
     
     // HTML içeriği döndür
+    console.log(`[${slug}] Sayfa render ediliyor...`);
     return (
       <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
     );
   } catch (error) {
-    console.error(`[${slug}] Sayfa yükleme hatası:`, error);
+    console.error(`[${slug}] Sayfa yükleme hatası:`, {
+      error: error instanceof Error ? {
+        message: error.message,
+        stack: error.stack,
+        name: error.name
+      } : error
+    });
     
     // Hata sayfası gösterme
     return (
