@@ -12,23 +12,11 @@ handlebars.registerHelper('ifEquals', function(this: any, arg1: any, arg2: any, 
 /**
  * Firma bilgileri için vCard (VCF) dosyası oluşturur
  * @param firma Firma bilgileri
- * @returns Oluşturulan vCard dosyasının yolu
+ * @returns vCard içeriği (string)
  */
-function generateVCardFile(firma: Firma): string {
+function generateVCardContent(firma: Firma): string {
   try {
-    console.log(`vCard dosyası oluşturuluyor. Firma: ${firma.firma_adi}`);
-    
-    // Firma dizinini kontrol et
-    const firmaDir = path.join(process.cwd(), 'public', firma.slug);
-    if (!fs.existsSync(firmaDir)) {
-      fs.mkdirSync(firmaDir, { recursive: true });
-    }
-    
-    // Dosya adını temizle (boşluk ve özel karakterleri kaldır)
-    const safeFileName = firma.firma_adi
-      .replace(/[^\w\sığüşöçİĞÜŞÖÇ]/g, '')  // Türkçe karakterlere izin ver
-      .replace(/\s+/g, '-')
-      .toLowerCase();
+    console.log(`vCard içeriği oluşturuluyor. Firma: ${firma.firma_adi}`);
     
     // İletişim bilgilerini al
     let telefon = '';
@@ -132,27 +120,11 @@ function generateVCardFile(firma: Firma): string {
       : (typeof firma.firma_adi === 'string' ? firma.firma_adi : 'İsimsiz Firma');
     
     // vCard içeriği oluştur
-    const vCardContent = `BEGIN:VCARD
-VERSION:3.0
-FN:${firmaIsim}
-${telefon ? `TEL;TYPE=WORK,VOICE:${telefon}` : ''}
-${eposta ? `EMAIL;TYPE=WORK:${eposta}` : ''}
-${websiteStr ? `URL:${websiteStr}` : ''}
-END:VCARD`;
-    
-    // Dosya yolu
-    const vCardPath = path.join(firmaDir, `${safeFileName}.vcf`);
-    
-    // Dosyayı yaz - sonundaki % karakterinin eklenmemesi için trim() kullanıyoruz
-    fs.writeFileSync(vCardPath, vCardContent.trim());
-    
-    console.log(`vCard dosyası başarıyla oluşturuldu: ${vCardPath}`);
-    
-    // Firma dizinine göre relatif yol döndür
-    return `/${firma.slug}/${safeFileName}.vcf`;
+    const vCardContent = `BEGIN:VCARD\nVERSION:3.0\nFN:${firmaIsim}\n${telefon ? `TEL;TYPE=WORK,VOICE:${telefon}` : ''}\n${eposta ? `EMAIL;TYPE=WORK:${eposta}` : ''}\n${websiteStr ? `URL:${websiteStr}` : ''}\nEND:VCARD`;
+    return vCardContent.trim();
   } catch (error) {
-    console.error('vCard dosyası oluşturulurken hata oluştu:', error);
-    return '#'; // Hata durumunda boş link döndür
+    console.error('vCard içeriği oluşturulurken hata oluştu:', error);
+    return '';
   }
 }
 
@@ -624,8 +596,8 @@ export async function generateHtmlForFirma(firma: any, oldSlug?: string): Promis
   try {
     console.log('HTML oluşturuluyor, firma:', firma);
     
-    // VCard dosyası oluştur
-    const vcardPath = generateVCardFile(firma);
+    // VCard içeriği oluştur
+    const vcardContent = generateVCardContent(firma);
     
     // İletişim verilerini parse et
     let telefonlar: Array<{value: string; label?: string}> = [];
@@ -775,8 +747,8 @@ export async function generateHtmlForFirma(firma: any, oldSlug?: string): Promis
       website: websiteler,
       harita: haritalar,
       profil_foto: firma.profil_foto,
-      vcard_dosya: vcardPath || firma.vcard_dosya,
-      vcard_path: firma.vcard_path || vcardPath,
+      vcard_dosya: vcardContent || firma.vcard_dosya,
+      vcard_path: firma.vcard_path || vcardContent,
       yetkili_adi: firma.yetkili_adi,
       yetkili_pozisyon: firma.yetkili_pozisyon,
       firma_hakkinda: firma.firma_hakkinda,
