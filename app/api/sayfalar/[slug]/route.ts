@@ -1,7 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import Handlebars from 'handlebars';
 import prisma from '@/app/lib/db';
+
+// HTML şablonunu kod içinde string olarak tut
+const pageTemplate = `
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{firma_adi}} - Dijital Kartvizit</title>
+</head>
+<body>
+  <h1>{{firma_adi}}</h1>
+  <p>{{yetkili_adi}} - {{yetkili_pozisyon}}</p>
+  {{#if website}}
+    <ul>
+      {{#each website}}
+        <li><a href="{{this}}" target="_blank">{{this}}</a></li>
+      {{/each}}
+    </ul>
+  {{/if}}
+  {{#if firma_logo}}
+    <img src="{{firma_logo}}" alt="Logo" style="max-width:150px;" />
+  {{/if}}
+  <!-- Sosyal medya ve iletişim alanları örnek -->
+  {{#if social_media}}
+    <h3>Sosyal Medya</h3>
+    <ul>
+      {{#each social_media}}
+        <li><a href="{{this.url}}" target="_blank">{{this.platform}}{{#if this.label}} ({{this.label}}){{/if}}</a></li>
+      {{/each}}
+    </ul>
+  {{/if}}
+  {{#if communication}}
+    <h3>İletişim</h3>
+    <ul>
+      {{#each communication}}
+        <li>{{this.tip}}: {{this.deger}}</li>
+      {{/each}}
+    </ul>
+  {{/if}}
+</body>
+</html>
+`;
 
 /**
  * Firma sayfasının HTML içeriğini getirir
@@ -34,55 +76,56 @@ export async function GET(
       );
     }
     
-    // HTML dosya yolu
-    const htmlPath = path.join(process.cwd(), 'public', slug, 'index.html');
-    console.log(`[${slug}] HTML dosya yolu: ${htmlPath}`);
-    console.log(`[${slug}] Çalışma dizini: ${process.cwd()}`);
-    
-    // Dosya var mı kontrol et
-    if (!fs.existsSync(htmlPath)) {
-      console.log(`[${slug}] HTML dosyası bulunamadı`);
-      return NextResponse.json(
-        { error: 'Sayfa bulunamadı' },
-        { status: 404 }
-      );
+    // Website alanını dizi olarak hazırla
+    let websiteArray: string[] = [];
+    if (firma.website) {
+      if (typeof firma.website === 'string' && firma.website.startsWith('[')) {
+        try {
+          websiteArray = JSON.parse(firma.website);
+        } catch (e) {
+          websiteArray = [firma.website];
+        }
+      } else {
+        websiteArray = [firma.website];
+      }
     }
-    
-    // HTML içeriğini oku
-    console.log(`[${slug}] HTML dosyası okunuyor...`);
-    const htmlContent = fs.readFileSync(htmlPath, 'utf8');
-    console.log(`[${slug}] HTML dosyası başarıyla okundu, içerik uzunluğu: ${htmlContent.length} karakter`);
-    
-    if (!htmlContent || htmlContent.length < 100) {
-      console.error(`[${slug}] HTML içeriği geçersiz veya çok kısa:`, {
-        contentLength: htmlContent.length,
-        contentPreview: htmlContent.substring(0, 100)
-      });
-      return NextResponse.json(
-        { error: 'HTML içeriği geçersiz' },
-        { status: 500 }
-      );
+    // Sosyal medya ve iletişim alanlarını diziye çevir
+    let socialMediaArray: any[] = [];
+    if (firma.social_media_data) {
+      try {
+        socialMediaArray = JSON.parse(firma.social_media_data);
+      } catch (e) {
+        socialMediaArray = [];
+      }
     }
-    
-    // HTML içeriğini döndür
-    console.log(`[${slug}] HTML içeriği başarıyla döndürülüyor...`);
-    return new Response(htmlContent, {
+    let communicationArray: any[] = [];
+    if (firma.communication_data) {
+      try {
+        communicationArray = JSON.parse(firma.communication_data);
+      } catch (e) {
+        communicationArray = [];
+      }
+    }
+    // HTML'i oluştur
+    const compiledTemplate = Handlebars.compile(pageTemplate);
+    const html = compiledTemplate({
+      firma_adi: firma.firma_adi,
+      yetkili_adi: firma.yetkili_adi,
+      yetkili_pozisyon: firma.yetkili_pozisyon,
+      slug: firma.slug,
+      website: websiteArray,
+      firma_logo: firma.firma_logo,
+      social_media: socialMediaArray,
+      communication: communicationArray
+    });
+    return new NextResponse(html, {
       headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'no-store'
+        'Content-Type': 'text/html',
+        'Cache-Control': 'public, max-age=86400, stale-while-revalidate'
       }
     });
   } catch (error) {
-    console.error(`[${params.slug}] Sayfa içeriği getirilirken hata:`, {
-      error: error instanceof Error ? {
-        message: error.message,
-        stack: error.stack,
-        name: error.name
-      } : error
-    });
-    return NextResponse.json(
-      { error: 'Sayfa içeriği getirilirken bir hata oluştu' },
-      { status: 500 }
-    );
+    console.error('Sayfa içeriği oluşturulurken hata:', error);
+    return NextResponse.json({ error: 'Sayfa içeriği oluşturulurken bir hata oluştu' }, { status: 500 });
   }
 }

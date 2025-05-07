@@ -1,9 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
-import path from 'path';
 import Handlebars from 'handlebars';
-import fs from 'fs';
 import prisma from '../../../../lib/db';
-import { generateQRCode } from '../../../../lib/qrCodeGenerator';
+import QRCode from 'qrcode';
+
+// HTML şablonunu kod içinde string olarak tut
+const qrTemplate = `
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{firma_adi}} - QR Kod</title>
+</head>
+<body>
+  <h1>{{firma_adi}}</h1>
+  <p>{{yetkili_adi}} - {{yetkili_pozisyon}}</p>
+  <img src="{{qr_code_data_url}}" alt="QR Kod" />
+  {{#if website}}
+    <ul>
+      {{#each website}}
+        <li><a href="{{this}}" target="_blank">{{this}}</a></li>
+      {{/each}}
+    </ul>
+  {{/if}}
+  {{#if firma_logo}}
+    <img src="{{firma_logo}}" alt="Logo" style="max-width:150px;" />
+  {{/if}}
+</body>
+</html>
+`;
 
 export async function GET(
   request: NextRequest,
@@ -20,47 +45,37 @@ export async function GET(
     if (!firma) {
       return NextResponse.json({ error: 'Firma bulunamadı' }, { status: 404 });
     }
-    
-    // QR kod dosyasının varlığını kontrol et
-    const qrCodePath = path.join(process.cwd(), 'public', 'qrcodes', `${slug}.png`);
-    if (!fs.existsSync(qrCodePath)) {
-      // QR kod yoksa oluştur
-      await generateQRCode(slug);
-    }
-    
-    // QR sayfa şablonunu oku
-    const templatePath = path.join(process.cwd(), 'templates', 'qr-template.html');
-    const template = fs.readFileSync(templatePath, 'utf8');
-    
-    // Şablonu derle
-    const compiledTemplate = Handlebars.compile(template);
-    
+
+    // QR kodunu anlık olarak oluştur (örneğin firma slug'ına özel bir URL encode edebilirsin)
+    const qrData = `${request.nextUrl.origin}/${slug}`;
+    const qrCodeDataUrl = await QRCode.toDataURL(qrData, { width: 300 });
+
     // Website alanını dizi olarak hazırla
     let websiteArray: string[] = [];
     if (firma.website) {
-      // Website bilgisi JSON formatında ise parse et
       if (typeof firma.website === 'string' && firma.website.startsWith('[')) {
         try {
           websiteArray = JSON.parse(firma.website);
         } catch (e) {
-          console.error('Website JSON parse hatası:', e);
           websiteArray = [firma.website];
         }
       } else {
         websiteArray = [firma.website];
       }
     }
-    
+
     // HTML'i oluştur
+    const compiledTemplate = Handlebars.compile(qrTemplate);
     const html = compiledTemplate({
       firma_adi: firma.firma_adi,
       yetkili_adi: firma.yetkili_adi,
       yetkili_pozisyon: firma.yetkili_pozisyon,
       slug: firma.slug,
       website: websiteArray,
-      firma_logo: firma.firma_logo
+      firma_logo: firma.firma_logo,
+      qr_code_data_url: qrCodeDataUrl
     });
-    
+
     return new NextResponse(html, {
       headers: {
         'Content-Type': 'text/html',
