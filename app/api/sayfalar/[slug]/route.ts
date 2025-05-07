@@ -45,6 +45,25 @@ const pageTemplate = `
 </html>
 `;
 
+// Sosyal medya platformları için ikon ve label eşlemesi
+const SOCIAL_MEDIA_META: Record<string, { icon: string, label: string, urlPrefix: string }> = {
+  instagram: { icon: '/img/instagram.png', label: 'Instagram', urlPrefix: 'https://instagram.com/' },
+  youtube: { icon: '/img/youtube.png', label: 'YouTube', urlPrefix: 'https://youtube.com/' },
+  facebook: { icon: '/img/facebook.png', label: 'Facebook', urlPrefix: 'https://facebook.com/' },
+  twitter: { icon: '/img/twitter.png', label: 'Twitter', urlPrefix: 'https://twitter.com/' },
+  tiktok: { icon: '/img/tiktok.png', label: 'TikTok', urlPrefix: 'https://tiktok.com/@' },
+  linkedin: { icon: '/img/linkedin.png', label: 'LinkedIn', urlPrefix: 'https://linkedin.com/in/' },
+  whatsapp: { icon: '/img/whatsapp.png', label: 'WhatsApp', urlPrefix: 'https://wa.me/' }
+};
+
+const COMM_META: Record<string, { icon: string, label: string, urlPrefix?: string }> = {
+  telefon: { icon: '/img/phone.png', label: 'Telefon', urlPrefix: 'tel:' },
+  gsm: { icon: '/img/phone.png', label: 'GSM', urlPrefix: 'tel:' },
+  email: { icon: '/img/mail.png', label: 'E-posta', urlPrefix: 'mailto:' },
+  mail: { icon: '/img/mail.png', label: 'E-posta', urlPrefix: 'mailto:' },
+  adres: { icon: '/img/address.png', label: 'Adres' }
+};
+
 /**
  * Firma sayfasının HTML içeriğini getirir
  */
@@ -78,10 +97,13 @@ export async function GET(
         for (const key in smObj) {
           if (Array.isArray(smObj[key])) {
             smObj[key].forEach((item: any) => {
+              const platform = key.replace('lar', '').replace('ler', '');
+              const meta = SOCIAL_MEDIA_META[platform] || {};
+              const value = item.url || item;
               socialMediaArray.push({
-                platform: key.replace('lar', '').replace('ler', ''),
-                url: item.url || item,
-                label: item.label || undefined
+                icon: meta.icon || '',
+                label: meta.label || platform,
+                url: value.startsWith('http') ? value : (meta.urlPrefix ? meta.urlPrefix + value : value)
               });
             });
           }
@@ -96,9 +118,14 @@ export async function GET(
         for (const key in commObj) {
           if (Array.isArray(commObj[key])) {
             commObj[key].forEach((item: any) => {
+              const tip = key.replace('lar', '').replace('ler', '');
+              const meta = COMM_META[tip] || {};
+              const value = item.value || item;
               communicationArray.push({
-                tip: key.replace('lar', '').replace('ler', ''),
-                deger: item.value || item
+                icon: meta.icon || '',
+                label: meta.label || tip,
+                url: meta.urlPrefix ? meta.urlPrefix + value : '',
+                value
               });
             });
           }
