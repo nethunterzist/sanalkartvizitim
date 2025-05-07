@@ -8,6 +8,11 @@ handlebars.registerHelper('ifEquals', function(this: any, arg1: any, arg2: any, 
     return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
 });
 
+// Banka hesapları için JSON parse helper'ı
+handlebars.registerHelper('parseBankAccounts', function(jsonStr: string) {
+    try { return JSON.parse(jsonStr); } catch { return []; }
+});
+
 // Dinamik metadatayı oluşturan fonksiyon
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const { slug } = params;
