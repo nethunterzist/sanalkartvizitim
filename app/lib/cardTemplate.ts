@@ -138,6 +138,55 @@ export const cardTemplate = `
             height: 20px;
             filter: brightness(0) invert(1);
         }
+        .custom-popup-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .custom-popup-content {
+            background: #fff;
+            border-radius: 12px;
+            padding: 32px 24px 24px 24px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            position: relative;
+            animation: popupIn 0.2s;
+        }
+        @keyframes popupIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .custom-popup-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #888;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .custom-popup-close:hover {
+            color: #c00;
+        }
+        .tax-info div {
+            margin-bottom: 10px;
+            font-size: 1rem;
+            color: #222;
+        }
+        .about-content {
+            font-size: 1rem;
+            color: #222;
+            line-height: 1.6;
+            margin-top: 10px;
+            word-break: break-word;
+        }
     </style>
 </head>
 <body>
@@ -208,7 +257,7 @@ export const cardTemplate = `
                         {{/if}}
                         {{#if tax}}
                             <div class="col-3 icon">
-                                <a href="#" class="d-flex flex-column align-items-center text-decoration-none">
+                                <a href="#" onclick="showTaxPopup(event)" class="d-flex flex-column align-items-center text-decoration-none">
                                     <img src="{{tax.icon}}" alt="{{tax.label}}">
                                     <span class="mt-1 text-center small icon-label">{{tax.label}}</span>
                                 </a>
@@ -216,7 +265,7 @@ export const cardTemplate = `
                         {{/if}}
                         {{#if about}}
                             <div class="col-3 icon">
-                                <a href="#" class="d-flex flex-column align-items-center text-decoration-none">
+                                <a href="#" onclick="showAboutPopup(event)" class="d-flex flex-column align-items-center text-decoration-none">
                                     <img src="{{about.icon}}" alt="{{about.label}}">
                                     <span class="mt-1 text-center small icon-label">{{about.label}}</span>
                                 </a>
@@ -227,5 +276,43 @@ export const cardTemplate = `
             </div>
         </div>
     </div>
+
+    <!-- Vergi Bilgileri Popup -->
+    <div id="tax-popup" class="custom-popup-overlay" style="display:none;">
+        <div class="custom-popup-content">
+            <button class="custom-popup-close" onclick="closeTaxPopup()">&times;</button>
+            <h2>Vergi Bilgileri</h2>
+            <div class="tax-info">
+                <div><b>Firma Ünvanı:</b> {{tax.firma_unvan}}</div>
+                <div><b>Vergi Numarası:</b> {{tax.firma_vergi_no}}</div>
+                <div><b>Vergi Dairesi:</b> {{tax.vergi_dairesi}}</div>
+            </div>
+        </div>
+    </div>
+    <!-- Hakkımızda Popup -->
+    <div id="about-popup" class="custom-popup-overlay" style="display:none;">
+        <div class="custom-popup-content">
+            <button class="custom-popup-close" onclick="closeAboutPopup()">&times;</button>
+            <h2>Hakkımızda</h2>
+            <div class="about-content">{{about.content}}</div>
+        </div>
+    </div>
+
+    <script>
+    function showTaxPopup(e) {
+        e.preventDefault();
+        document.getElementById('tax-popup').style.display = 'flex';
+    }
+    function closeTaxPopup() {
+        document.getElementById('tax-popup').style.display = 'none';
+    }
+    function showAboutPopup(e) {
+        e.preventDefault();
+        document.getElementById('about-popup').style.display = 'flex';
+    }
+    function closeAboutPopup() {
+        document.getElementById('about-popup').style.display = 'none';
+    }
+    </script>
 </body>
 </html>`; 
