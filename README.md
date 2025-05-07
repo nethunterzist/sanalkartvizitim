@@ -1,6 +1,31 @@
-# Sanal Kartvizit Uygulaması
+# Sanal Kartvizit - Next.js, Vercel ve Supabase
 
-Bu proje, firmalar için dijital kartvizit oluşturmaya olanak tanıyan bir web uygulamasıdır. Firma bilgilerini, iletişim verilerini ve sosyal medya hesaplarını içeren dijital kartvizitler oluşturulabilir ve paylaşılabilir.
+## Önemli Mimari Değişiklikler (Mayıs 2024)
+
+### Sunucusuz (Serverless) Uyumlu Yeni Mimari
+- **QR kod, HTML ve vCard (VCF) dosyaları artık dosya sistemine yazılmıyor.**
+- Tüm bu içerikler API route'larında anlık olarak response ile üretiliyor.
+- Vercel gibi sunucusuz ortamlarda dosya sistemine yazmak mümkün olmadığı için, eski `fs.writeFileSync`, `fs.mkdirSync` gibi işlemler tamamen kaldırıldı.
+- QR kodlar `toDataURL` ile base64 olarak response ile dönüyor.
+- vCard (VCF) dosyası endpointi, içeriği string olarak oluşturup response ile döndürüyor.
+- HTML şablonları da response ile anlık üretiliyor.
+
+### Geliştiriciler İçin Notlar
+- **Dosya sistemine yazma gerektiren hiçbir kod bırakılmamalı.**
+- Tüm dinamik içerikler (QR, vCard, HTML) sadece response ile üretilmeli.
+- Local geliştirme için dosya yazma işlemleri sadece scriptlerde kullanılabilir, production'da asla kullanılmaz.
+- Proje artık Vercel ve benzeri serverless ortamlarda uzun ömürlü ve sorunsuz çalışır.
+
+### Değişiklik Özeti
+- `lib/qrCodeGenerator.ts`: Sadece `toDataURL` ile QR kod response üretimi.
+- `lib/vcardGenerator.ts`: vCard içeriği sadece string olarak oluşturuluyor, dosya sistemine yazılmıyor.
+- `app/api/sayfalar/[slug]/vcard/route.ts`: vCard response ile anlık üretiliyor.
+- `app/api/firmalar/route.ts` ve `[id]/route.ts`: vCard dosya yolu ve yazma işlemleri tamamen kaldırıldı.
+
+---
+
+## Kurulum ve Kullanım
+(Standart kurulum ve kullanım adımlarını buraya ekleyin...)
 
 ## Özellikler
 
