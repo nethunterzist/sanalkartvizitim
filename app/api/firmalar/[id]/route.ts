@@ -5,7 +5,7 @@ import { generateVCard, VCardData } from '@/app/lib/vcardGenerator';
 import * as fs from 'fs';
 import * as path from 'path';
 import { parseForm, processImages } from '@/app/lib/multerHelper';
-import { generateQRCode } from '@/lib/qrCodeGenerator';
+import { generateQRCodeDataUrl } from '@/lib/qrCodeGenerator';
 
 // SocialMediaData interface tanımı eklendi
 interface SocialMediaData {
@@ -265,13 +265,6 @@ export async function DELETE(
       if (fs.existsSync(htmlDir)) {
         fs.rmSync(htmlDir, { recursive: true, force: true });
         console.log(`HTML klasörü silindi: ${htmlDir}`);
-      }
-      
-      // QR kod dosyasını sil
-      const qrCodePath = path.join(process.cwd(), 'public', 'qrcodes', `${firmaSlug}.png`);
-      if (fs.existsSync(qrCodePath)) {
-        fs.unlinkSync(qrCodePath);
-        console.log(`QR kod dosyası silindi: ${qrCodePath}`);
       }
       
       // Profil fotoğrafını sil
