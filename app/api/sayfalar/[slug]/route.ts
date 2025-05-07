@@ -57,11 +57,16 @@ const SOCIAL_MEDIA_META: Record<string, { icon: string, label: string, urlPrefix
 };
 
 const COMM_META: Record<string, { icon: string, label: string, urlPrefix?: string }> = {
-  telefon: { icon: '/img/phone.png', label: 'Telefon', urlPrefix: 'tel:' },
-  gsm: { icon: '/img/phone.png', label: 'GSM', urlPrefix: 'tel:' },
+  telefon: { icon: '/img/tel.png', label: 'Telefon', urlPrefix: 'tel:' },
+  gsm: { icon: '/img/tel.png', label: 'GSM', urlPrefix: 'tel:' },
   email: { icon: '/img/mail.png', label: 'E-posta', urlPrefix: 'mailto:' },
   mail: { icon: '/img/mail.png', label: 'E-posta', urlPrefix: 'mailto:' },
-  adres: { icon: '/img/address.png', label: 'Adres' }
+  eposta: { icon: '/img/mail.png', label: 'E-posta', urlPrefix: 'mailto:' },
+  whatsapp: { icon: '/img/wp.png', label: 'WhatsApp', urlPrefix: 'https://wa.me/' },
+  telegram: { icon: '/img/telegram.png', label: 'Telegram', urlPrefix: 'https://t.me/' },
+  harita: { icon: '/img/adres.png', label: 'Harita' },
+  website: { icon: '/img/web.png', label: 'Website', urlPrefix: 'https://' },
+  adres: { icon: '/img/adres.png', label: 'Adres' }
 };
 
 /**
