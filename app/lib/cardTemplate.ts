@@ -187,6 +187,23 @@ export const cardTemplate = `
             margin-top: 10px;
             word-break: break-word;
         }
+        .copy-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 8px;
+            padding: 2px;
+            vertical-align: middle;
+        }
+        .copy-icon {
+            width: 18px;
+            height: 18px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .copy-btn:hover .copy-icon {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -283,9 +300,15 @@ export const cardTemplate = `
             <button class="custom-popup-close" onclick="closeTaxPopup()">&times;</button>
             <h2>Vergi Bilgileri</h2>
             <div class="tax-info">
-                <div><b>Firma Ünvanı:</b> {{tax.firma_unvan}}</div>
-                <div><b>Vergi Numarası:</b> {{tax.firma_vergi_no}}</div>
-                <div><b>Vergi Dairesi:</b> {{tax.vergi_dairesi}}</div>
+                <div><b>Firma Ünvanı:</b> {{tax.firma_unvan}}
+                    <button class="copy-btn" onclick="copyToClipboard('{{tax.firma_unvan}}', event)" title="Kopyala"><img src='/img/paylas.png' class='copy-icon'></button>
+                </div>
+                <div><b>Vergi Numarası:</b> {{tax.firma_vergi_no}}
+                    <button class="copy-btn" onclick="copyToClipboard('{{tax.firma_vergi_no}}', event)" title="Kopyala"><img src='/img/paylas.png' class='copy-icon'></button>
+                </div>
+                <div><b>Vergi Dairesi:</b> {{tax.vergi_dairesi}}
+                    <button class="copy-btn" onclick="copyToClipboard('{{tax.vergi_dairesi}}', event)" title="Kopyala"><img src='/img/paylas.png' class='copy-icon'></button>
+                </div>
             </div>
         </div>
     </div>
@@ -293,7 +316,10 @@ export const cardTemplate = `
     <div id="about-popup" class="custom-popup-overlay" style="display:none;">
         <div class="custom-popup-content">
             <button class="custom-popup-close" onclick="closeAboutPopup()">&times;</button>
-            <h2>Hakkımızda</h2>
+            <h2 style="display: flex; align-items: center; justify-content: space-between;">
+                Hakkımızda
+                <button class="copy-btn" onclick="copyToClipboard(document.querySelector('.about-content').innerText, event)" title="Kopyala"><img src='/img/paylas.png' class='copy-icon'></button>
+            </h2>
             <div class="about-content">{{about.content}}</div>
         </div>
     </div>
@@ -312,6 +338,15 @@ export const cardTemplate = `
     }
     function closeAboutPopup() {
         document.getElementById('about-popup').style.display = 'none';
+    }
+    function copyToClipboard(text, event) {
+        event.preventDefault();
+        if (!text) return;
+        navigator.clipboard.writeText(text).then(function() {
+            const btn = event.currentTarget;
+            btn.style.opacity = '0.5';
+            setTimeout(() => { btn.style.opacity = '1'; }, 700);
+        });
     }
     </script>
 </body>
