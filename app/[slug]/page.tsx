@@ -16,7 +16,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
             ? `https://${process.env.VERCEL_URL}`
             : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
         const apiUrl = `${baseUrl}/api/sayfalar/${slug}`;
-        const response = await fetch(apiUrl, { cache: 'no-store', headers: { 'Accept': 'text/html' } });
+        const response = await fetch(apiUrl, { 
+            cache: 'no-store', 
+            headers: { 
+                'Accept': 'application/json'
+            } 
+        });
         
         if (!response.ok) {
             return {
@@ -54,12 +59,20 @@ export default async function KartvizitPage({ params }: { params: { slug: string
             ? `https://${process.env.VERCEL_URL}`
             : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
         const apiUrl = `${baseUrl}/api/sayfalar/${slug}`;
-        const response = await fetch(apiUrl, { cache: 'no-store', headers: { 'Accept': 'text/html' } });
+        
+        // API'den JSON verisi al
+        const response = await fetch(apiUrl, { 
+            cache: 'no-store', 
+            headers: { 
+                'Accept': 'application/json'
+            } 
+        });
         
         if (!response.ok) {
             return notFound();
         }
 
+        // JSON verisini parse et
         const data = await response.json();
         
         // Handlebars ile template'i derle

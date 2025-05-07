@@ -87,6 +87,38 @@ const cardTemplate = `
             border-radius: 50%;
             transform: scale(1.1);
         }
+        .contact-info {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f8f9fa;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        .social-link:hover {
+            background-color: #e9ecef;
+            transform: translateY(-2px);
+        }
+        .social-link i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
         .rehber-icon img {
             width: 100%;
             max-width: none;
@@ -192,7 +224,58 @@ const cardTemplate = `
     </style>
 </head>
 <body>
-    <!-- ... (devamı: index-template.html'ün tamamı buraya eklenecek) ... -->
+    <div class="main-container">
+        <div class="background">
+            <div class="card-content">
+                {{#if firma_logo}}
+                <div class="profile-container">
+                    <img src="{{firma_logo}}" alt="{{firma_adi}}" class="profile-image">
+                </div>
+                {{/if}}
+                
+                <h1>{{firma_adi}}</h1>
+                {{#if yetkili_adi}}
+                <h2>{{yetkili_adi}}</h2>
+                {{/if}}
+                {{#if yetkili_pozisyon}}
+                <p>{{yetkili_pozisyon}}</p>
+                {{/if}}
+
+                {{#if communication}}
+                <div class="contact-info">
+                    <h3>İletişim Bilgileri</h3>
+                    {{#each communication}}
+                    <p>
+                        <strong>{{this.tip}}:</strong> {{this.deger}}
+                        {{#if this.label}}({{this.label}}){{/if}}
+                    </p>
+                    {{/each}}
+                </div>
+                {{/if}}
+
+                {{#if social_media}}
+                <div class="social-links">
+                    {{#each social_media}}
+                    <a href="{{this.url}}" target="_blank" class="social-link">
+                        <i class="fab fa-{{this.platform}}"></i>
+                        {{this.platform}}
+                        {{#if this.label}}({{this.label}}){{/if}}
+                    </a>
+                    {{/each}}
+                </div>
+                {{/if}}
+
+                {{#if website}}
+                <div class="contact-info">
+                    <h3>Web Siteleri</h3>
+                    {{#each website}}
+                    <p><a href="{{this}}" target="_blank">{{this}}</a></p>
+                    {{/each}}
+                </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
 </body>
 </html>`;
 
