@@ -259,44 +259,8 @@ export async function DELETE(
     });
     
     // HTML ve diğer dosyaları sil
-    try {
-      // HTML klasörünü sil
-      const htmlDir = path.join(process.cwd(), 'public', firmaSlug);
-      if (fs.existsSync(htmlDir)) {
-        fs.rmSync(htmlDir, { recursive: true, force: true });
-        console.log(`HTML klasörü silindi: ${htmlDir}`);
-      }
-      
-      // Profil fotoğrafını sil
-      if (firma.profil_foto) {
-        const profilFotoPath = path.join(process.cwd(), 'public', firma.profil_foto);
-        if (fs.existsSync(profilFotoPath)) {
-          fs.unlinkSync(profilFotoPath);
-          console.log(`Profil fotoğrafı silindi: ${profilFotoPath}`);
-        }
-      }
-      
-      // Katalog dosyasını sil
-      if (firma.katalog) {
-        const katalogPath = path.join(process.cwd(), 'public', firma.katalog);
-        if (fs.existsSync(katalogPath)) {
-          fs.unlinkSync(katalogPath);
-          console.log(`Katalog dosyası silindi: ${katalogPath}`);
-        }
-      }
-
-      // Firma logosunu sil
-      if (firma.firma_logo) {
-        const firmaLogoPath = path.join(process.cwd(), 'public', firma.firma_logo);
-        if (fs.existsSync(firmaLogoPath)) {
-          fs.unlinkSync(firmaLogoPath);
-          console.log(`Firma logosu silindi: ${firmaLogoPath}`);
-        }
-      }
-    } catch (error) {
-      console.error('Dosya silme hatası:', error);
-      // Dosya silme hataları silme işlemini engellemez
-    }
+    // Serverless ortamda dosya sistemi işlemleri kaldırıldı
+    // Sadece veritabanı kaydı siliniyor
     
     return NextResponse.json({ 
       message: 'Firma başarıyla silindi', 
@@ -309,34 +273,6 @@ export async function DELETE(
       { message: 'Firma silinirken bir hata oluştu' },
       { status: 500 }
     );
-  }
-}
-
-/**
- * Dosya yükleme işlemleri için yardımcı fonksiyon
- */
-async function handleFileUpload(file: File, slug: string): Promise<string | null> {
-  try {
-    // Upload dizini oluştur
-    const uploadDir = path.join(process.cwd(), 'public/uploads');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    
-    // Benzersiz dosya adı oluştur
-    const extension = path.extname(file.name);
-    const fileName = `${slug}-${Date.now()}${extension}`;
-    const filePath = path.join(uploadDir, fileName);
-    
-    // Dosyayı kaydet
-    const buffer = Buffer.from(await file.arrayBuffer());
-    fs.writeFileSync(filePath, buffer);
-    
-    // Dosya URL'si (web'den erişim için)
-    return `/uploads/${fileName}`;
-  } catch (error) {
-    console.error('Dosya yükleme hatası:', error);
-    return null;
   }
 }
 
