@@ -69,6 +69,14 @@ const COMM_META: Record<string, { icon: string, label: string, urlPrefix?: strin
   adres: { icon: '/img/adres.png', label: 'Adres' }
 };
 
+// Ekstra ikon ve label eşlemesi
+const EXTRA_META = {
+  about: { icon: '/img/about.png', label: 'Hakkımızda' },
+  tax: { icon: '/img/tax.png', label: 'Vergi Bilgileri' },
+  katalog: { icon: '/img/pdf.png', label: 'Katalog' },
+  iban: { icon: '/img/iban.png', label: 'IBAN Bilgileri' }
+};
+
 /**
  * Firma sayfasının HTML içeriğini getirir
  */
@@ -153,7 +161,16 @@ export async function GET(
         communication: communicationArray,
         firma_hakkinda: firma.firma_hakkinda,
         firma_hakkinda_baslik: firma.firma_hakkinda_baslik,
-        katalog: firma.katalog,
+        katalog: firma.katalog ? { icon: EXTRA_META.katalog.icon, label: EXTRA_META.katalog.label, url: firma.katalog } : undefined,
+        iban: firma.bank_accounts ? { icon: EXTRA_META.iban.icon, label: EXTRA_META.iban.label, value: firma.bank_accounts } : undefined,
+        tax: (firma.firma_unvan || firma.firma_vergi_no || firma.vergi_dairesi) ? {
+          icon: EXTRA_META.tax.icon,
+          label: EXTRA_META.tax.label,
+          firma_unvan: firma.firma_unvan,
+          firma_vergi_no: firma.firma_vergi_no,
+          vergi_dairesi: firma.vergi_dairesi
+        } : undefined,
+        about: firma.firma_hakkinda ? { icon: EXTRA_META.about.icon, label: EXTRA_META.about.label, content: firma.firma_hakkinda } : undefined,
         profil_foto: firma.profil_foto
       });
     } else {
