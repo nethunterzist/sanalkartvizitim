@@ -189,6 +189,39 @@ export const cardTemplate = `
                             </div>
                             {{/each}}
                         {{/if}}
+
+                        {{#if katalog}}
+                            <div class="col-3 icon">
+                                <a href="{{katalog.url}}" target="_blank" class="d-flex flex-column align-items-center text-decoration-none">
+                                    <img src="{{katalog.icon}}" alt="{{katalog.label}}">
+                                    <span class="mt-1 text-center small icon-label">{{katalog.label}}</span>
+                                </a>
+                            </div>
+                        {{/if}}
+                        {{#if iban}}
+                            <div class="col-3 icon">
+                                <a href="#" class="d-flex flex-column align-items-center text-decoration-none">
+                                    <img src="{{iban.icon}}" alt="{{iban.label}}">
+                                    <span class="mt-1 text-center small icon-label">{{iban.label}}</span>
+                                </a>
+                            </div>
+                        {{/if}}
+                        {{#if tax}}
+                            <div class="col-3 icon">
+                                <a href="#" class="d-flex flex-column align-items-center text-decoration-none">
+                                    <img src="{{tax.icon}}" alt="{{tax.label}}">
+                                    <span class="mt-1 text-center small icon-label">{{tax.label}}</span>
+                                </a>
+                            </div>
+                        {{/if}}
+                        {{#if about}}
+                            <div class="col-3 icon">
+                                <a href="#" class="d-flex flex-column align-items-center text-decoration-none">
+                                    <img src="{{about.icon}}" alt="{{about.label}}">
+                                    <span class="mt-1 text-center small icon-label">{{about.label}}</span>
+                                </a>
+                            </div>
+                        {{/if}}
                     </div>
                 </div>
             </div>
