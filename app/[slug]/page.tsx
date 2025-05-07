@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import handlebars from 'handlebars';
-import cardTemplate from '../lib/cardTemplate';
+import { cardTemplate } from '../lib/cardTemplate';
 
 // Handlebars helper fonksiyonunu kaydet
 handlebars.registerHelper('ifEquals', function(this: any, arg1: any, arg2: any, options: any) {
