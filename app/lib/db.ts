@@ -1,32 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import path from 'path';
-import fs from 'fs';
 import bcrypt from 'bcrypt';
-import { resolve } from 'path';
-import { unlink } from 'fs/promises';
-
-// Veri dizinini kontrol et ve oluştur
-const dataDir = path.join(process.cwd(), 'data');
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
-
-// Veritabanı dosya yolu
-const dbFile = path.join(dataDir, 'sanal-kartvizit.db');
-
-// Diğer veritabanı dosyalarını kontrol et
-const alternateDbs = [
-  path.join(dataDir, 'sanal_kartvizit.db'),
-  path.join(dataDir, 'database.sqlite')
-];
-
-// Alternatif veritabanları hakkında bilgilendirme yap
-alternateDbs.forEach(altDbFile => {
-  if (fs.existsSync(altDbFile) && altDbFile !== dbFile) {
-    console.log(`Alternatif veritabanı dosyası bulundu: ${altDbFile}`);
-    console.log(`Artık tek veritabanı dosyası kullanılacak: ${dbFile}`);
-  }
-});
 
 // Prisma client'ı oluştur
 const prismaClientSingleton = () => {
@@ -53,20 +26,6 @@ export async function getAllFirmalar() {
       firma_adi: 'asc'
     }
   });
-}
-
-/**
- * Deletes a file from the uploads directory
- */
-export async function deleteUploadedFile(filename: string | null | undefined) {
-  if (!filename) return;
-
-  try {
-    const filePath = resolve(process.cwd(), 'public/uploads', filename);
-    await unlink(filePath);
-  } catch (error) {
-    console.error('Error deleting file:', error);
-  }
 }
 
 /**
