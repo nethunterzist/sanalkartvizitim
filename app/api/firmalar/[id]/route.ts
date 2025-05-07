@@ -120,103 +120,83 @@ export async function PUT(
     return NextResponse.json({ error: 'Geçersiz ID' }, { status: 400 });
   }
 
+  let data: Record<string, any> = {};
+  let isFormData = false;
+
   try {
-    // Önce JSON olarak almayı dene
-    let data: Record<string, any>;
+    // Önce FormData olarak parse etmeyi dene
     try {
-      data = await request.json();
-      console.log("Request body parsed as JSON");
-    } catch (jsonError) {
-      console.log("Request is not JSON, attempting to parse FormData");
-      // JSON değilse FormData olarak işle
-      try {
-        const formData = await request.formData();
-        console.log("FormData parsed successfully");
-        
-        // FormData'yı normal objeye dönüştür
-        data = {};
-        for (const [key, value] of formData.entries()) {
-          // Dosya olmayan değerleri işle
-          if (!(value instanceof File)) {
-            data[key] = value;
-          }
+      const formData = await request.formData();
+      isFormData = true;
+      for (const [key, value] of formData.entries()) {
+        if (!(value instanceof File)) {
+          data[key] = value;
         }
-        
-        console.log("FormData converted to object successfully");
-      } catch (formError) {
-        console.error("Error parsing request body:", formError);
+      }
+      console.log("FormData başarıyla ayrıştırıldı:", Object.keys(data));
+    } catch (formError) {
+      // FormData ayrıştırılamazsa JSON olarak dene
+      try {
+        data = await request.json();
+        console.log("JSON body başarıyla ayrıştırıldı:", Object.keys(data));
+      } catch (jsonError) {
+        console.error("PUT [id] istek gövdesi ayrıştırılamadı:", formError, jsonError);
         return NextResponse.json({ 
           error: 'İstek gövdesi ayrıştırılamadı',
-          details: formError instanceof Error ? formError.message : 'Unknown error'
+          details: {
+            formError: formError instanceof Error ? formError.message : String(formError),
+            jsonError: jsonError instanceof Error ? jsonError.message : String(jsonError)
+          }
         }, { status: 400 });
       }
     }
-    
+
     // Mevcut firmayı sorgula
-    const existingFirma = await prisma.firmalar.findUnique({
-      where: { id }
-    });
-    
+    const existingFirma = await prisma.firmalar.findUnique({ where: { id } });
     if (!existingFirma) {
       return NextResponse.json({ error: 'Firma bulunamadı' }, { status: 404 });
     }
-    
+
     // Slug değişikliği kontrolü
     const oldSlug = existingFirma.slug;
     const newSlug = data.slug || oldSlug;
-    
-    console.log("Updating firma data:", { id, oldSlug, newSlug });
-    
-    // Firmayı güncelle - dosya işlemleri olmadan temel alanları güncelle
-    try {
-      const updatedFirma = await prisma.firmalar.update({
-        where: { id },
-        data: {
-          firma_adi: data.firma_adi || data.firmaAdi || existingFirma.firma_adi,
-          slug: newSlug,
-          yetkili_adi: data.yetkili_adi || data.yetkiliAdi || existingFirma.yetkili_adi,
-          yetkili_pozisyon: data.yetkili_pozisyon || data.yetkiliPozisyon || existingFirma.yetkili_pozisyon,
-          firma_hakkinda: data.firma_hakkinda || existingFirma.firma_hakkinda,
-          firma_hakkinda_baslik: data.firma_hakkinda_baslik || existingFirma.firma_hakkinda_baslik,
-          firma_unvan: data.firma_unvan || existingFirma.firma_unvan,
-          firma_vergi_no: data.firma_vergi_no || existingFirma.firma_vergi_no,
-          vergi_dairesi: data.vergi_dairesi || existingFirma.vergi_dairesi,
-          updated_at: new Date(),
-          communication_data: data.communication_data || existingFirma.communication_data,
-          social_media_data: data.social_media_data || existingFirma.social_media_data,
-          bank_accounts: data.bank_accounts || existingFirma.bank_accounts
-        }
-      });
-      
-      console.log("Firma veritabanı güncellendi:", updatedFirma.id);
-      
-      // HTML yeniden oluştur - try-catch içinde
-      try {
-        if (typeof generateHtmlForFirma === 'function') {
-          await generateHtmlForFirma(updatedFirma, oldSlug !== newSlug ? oldSlug : undefined);
-          console.log(`HTML yeniden oluşturuldu: ${updatedFirma.slug}`);
-        } else {
-          console.warn("generateHtmlForFirma fonksiyonu bulunamadı");
-        }
-      } catch (htmlError) {
-        console.error('HTML oluşturma hatası:', htmlError);
-        // HTML oluşturma hatası işlemi durdurmaz
+
+    // Firmayı güncelle
+    const updatedFirma = await prisma.firmalar.update({
+      where: { id },
+      data: {
+        firma_adi: data.firma_adi || data.firmaAdi || existingFirma.firma_adi,
+        slug: newSlug,
+        yetkili_adi: data.yetkili_adi || data.yetkiliAdi || existingFirma.yetkili_adi,
+        yetkili_pozisyon: data.yetkili_pozisyon || data.yetkiliPozisyon || existingFirma.yetkili_pozisyon,
+        firma_hakkinda: data.firma_hakkinda || existingFirma.firma_hakkinda,
+        firma_hakkinda_baslik: data.firma_hakkinda_baslik || existingFirma.firma_hakkinda_baslik,
+        firma_unvan: data.firma_unvan || existingFirma.firma_unvan,
+        firma_vergi_no: data.firma_vergi_no || existingFirma.firma_vergi_no,
+        vergi_dairesi: data.vergi_dairesi || existingFirma.vergi_dairesi,
+        updated_at: new Date(),
+        communication_data: data.communication_data || existingFirma.communication_data,
+        social_media_data: data.social_media_data || existingFirma.social_media_data,
+        bank_accounts: data.bank_accounts || existingFirma.bank_accounts
       }
-      
-      return NextResponse.json(updatedFirma);
-    } catch (dbError) {
-      console.error('Veritabanı güncelleme hatası:', dbError);
-      return NextResponse.json({ 
-        error: 'Veritabanı güncelleme hatası', 
-        details: dbError instanceof Error ? dbError.message : 'Unknown error' 
-      }, { status: 500 });
+    });
+
+    console.log("Firma veritabanı güncellendi:", updatedFirma.id);
+
+    // HTML yeniden oluşturmayı dene (isteğe bağlı)
+    try {
+      if (typeof generateHtmlForFirma === 'function') {
+        await generateHtmlForFirma(updatedFirma, oldSlug !== newSlug ? oldSlug : undefined);
+        console.log(`HTML yeniden oluşturuldu: ${updatedFirma.slug}`);
+      }
+    } catch (htmlError) {
+      console.error('HTML oluşturma hatası:', htmlError);
     }
+
+    return NextResponse.json(updatedFirma);
   } catch (error) {
-    console.error('Genel güncelleme hatası:', error);
-    return NextResponse.json({ 
-      error: 'İşlem başarısız', 
-      details: error instanceof Error ? error.message : 'Unknown error' 
-    }, { status: 500 });
+    console.error('PUT [id] genel hata:', error);
+    return NextResponse.json({ error: 'Firma güncellenirken beklenmeyen bir hata oluştu', details: String(error) }, { status: 500 });
   }
 }
 
