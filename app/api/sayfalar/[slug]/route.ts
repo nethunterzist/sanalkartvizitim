@@ -93,7 +93,19 @@ export async function GET(
     let socialMediaArray: any[] = [];
     if (firma.social_media_data) {
       try {
-        socialMediaArray = JSON.parse(firma.social_media_data);
+        const smObj = JSON.parse(firma.social_media_data);
+        socialMediaArray = [];
+        for (const key in smObj) {
+          if (Array.isArray(smObj[key])) {
+            smObj[key].forEach((item: any) => {
+              socialMediaArray.push({
+                platform: key.replace('lar', '').replace('ler', ''),
+                url: item.url || item,
+                label: item.label || undefined
+              });
+            });
+          }
+        }
       } catch (e) {
         socialMediaArray = [];
       }
@@ -101,7 +113,18 @@ export async function GET(
     let communicationArray: any[] = [];
     if (firma.communication_data) {
       try {
-        communicationArray = JSON.parse(firma.communication_data);
+        const commObj = JSON.parse(firma.communication_data);
+        communicationArray = [];
+        for (const key in commObj) {
+          if (Array.isArray(commObj[key])) {
+            commObj[key].forEach((item: any) => {
+              communicationArray.push({
+                tip: key.replace('lar', '').replace('ler', ''),
+                deger: item.value || item
+              });
+            });
+          }
+        }
       } catch (e) {
         communicationArray = [];
       }
