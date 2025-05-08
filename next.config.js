@@ -11,15 +11,15 @@ const nextConfig = {
   // Standalone modu için output yapılandırması
   output: 'standalone',
   // QR rotası yönlendirmesi için
-  async redirects() {
-    return [
-      {
-        source: '/:slug/qr',
-        destination: '/api/qr-codes/:slug',
-        permanent: true,
-      }
-    ]
-  },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/:slug/qr',
+  //       destination: '/api/qr-codes/:slug',
+  //       permanent: true,
+  //     }
+  //   ]
+  // },
   // VCF dosyalarının doğru MIME tipi ile sunulması için
   async headers() {
     return [
