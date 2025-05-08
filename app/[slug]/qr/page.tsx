@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import prisma from '@/app/lib/db';
 import QRCode from 'qrcode';
+import '../lib/cardTemplate.css'; // Ortak stilleri kullanmak için (eğer ayrı bir CSS dosyası varsa)
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const firma = await prisma.firmalar.findFirst({
