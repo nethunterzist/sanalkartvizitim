@@ -115,7 +115,7 @@ export async function GET(
               const value = item.url || item;
               socialMediaArray.push({
                 icon: meta.icon || '',
-                label: item.label || meta.label || platform,
+                label: (typeof item.label === 'string' && item.label.trim() !== '') ? item.label : (meta.label || platform),
                 url: value.startsWith('http') ? value : (meta.urlPrefix ? meta.urlPrefix + value : value)
               });
             });
@@ -136,7 +136,7 @@ export async function GET(
               const value = item.value || item;
               communicationArray.push({
                 icon: meta.icon || '',
-                label: item.label || meta.label || tip,
+                label: (typeof item.label === 'string' && item.label.trim() !== '') ? item.label : (meta.label || tip),
                 url: meta.urlPrefix ? meta.urlPrefix + value : '',
                 value
               });
