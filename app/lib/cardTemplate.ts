@@ -256,12 +256,7 @@ export const cardTemplate = `
 
                 <div class="container">
                     <div class="row justify-content-center mb-3">
-                        <div class="col-4 col-md-2 mb-2">
-                            <a href="/{{slug}}/qr" target="_blank" rel="noopener noreferrer" class="d-block text-center">
-                                <img src="/img/qr.png" alt="QR Kod" class="img-fluid mb-1" style="height:40px;" />
-                                <div class="small">QR Kod</div>
-                            </a>
-                        </div>
+                        <!-- QR kod ikonu buradan kaldırıldı, sadece ikonlar arasında olacak -->
                     </div>
                 </div>
 

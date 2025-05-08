@@ -39,24 +39,25 @@ export default async function QRPage({ params }: { params: { slug: string } }) {
   const qrCodeDataUrl = await QRCode.toDataURL(qrData, { width: 300 });
 
   return (
-    <div className="container text-center py-5">
-      <div className="card shadow-sm mx-auto" style={{ maxWidth: '500px' }}>
-        <div className="card-body">
-          <h1 className="card-title h3 mb-4">{firma.firma_adi}</h1>
-          {firma.firma_logo && (
-            <img 
-              src={firma.firma_logo} 
-              alt={`${firma.firma_adi} Logo`} 
-              className="img-fluid mb-4" 
-              style={{ maxHeight: '100px' }}
-            />
+    <div className="main-container">
+      <div className="background">
+        <div className="card-content" style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <div className="profile-container">
+            {firma.firma_logo ? (
+              <img src={firma.firma_logo} className="profile-image" alt={firma.firma_adi} />
+            ) : (
+              <img src="/img/profile-default.png" className="profile-image" alt={firma.firma_adi} />
+            )}
+          </div>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: 5, color: '#000' }}>{firma.firma_adi}</h1>
+          {firma.yetkili_adi && (
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: 5, color: '#000' }}>{firma.yetkili_adi}</h2>
           )}
-          <div className="mb-4">
-            <img 
-              src={qrCodeDataUrl} 
-              alt="QR Kod" 
-              className="img-fluid"
-            />
+          {firma.yetkili_pozisyon && (
+            <p style={{ fontSize: '1rem', color: '#666' }}>{firma.yetkili_pozisyon}</p>
+          )}
+          <div className="my-4">
+            <img src={qrCodeDataUrl} alt="QR Kod" style={{ width: 220, height: 220 }} />
           </div>
           <p className="text-muted mb-0">
             Bu QR kodu tarayarak dijital kartvizite erişebilirsiniz.
