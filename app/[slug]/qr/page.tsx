@@ -42,24 +42,24 @@ export default async function QRPage({ params }: { params: { slug: string } }) {
     <div className="main-container">
       <div className="background">
         <div className="card-content" style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="profile-container">
+          <div className="profile-container mb-3">
             {firma.firma_logo ? (
               <img src={firma.firma_logo} className="profile-image" alt={firma.firma_adi} />
             ) : (
               <img src="/img/profile-default.png" className="profile-image" alt={firma.firma_adi} />
             )}
           </div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: 5, color: '#000' }}>{firma.firma_adi}</h1>
+          <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: 8, color: '#222' }}>{firma.firma_adi}</h1>
           {firma.yetkili_adi && (
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 'bold', marginBottom: 5, color: '#000' }}>{firma.yetkili_adi}</h2>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: 600, marginBottom: 4, color: '#222' }}>{firma.yetkili_adi}</h2>
           )}
           {firma.yetkili_pozisyon && (
-            <p style={{ fontSize: '1rem', color: '#666' }}>{firma.yetkili_pozisyon}</p>
+            <p style={{ fontSize: '1.1rem', color: '#888', marginBottom: 18 }}>{firma.yetkili_pozisyon}</p>
           )}
-          <div className="my-4">
-            <img src={qrCodeDataUrl} alt="QR Kod" style={{ width: 220, height: 220 }} />
+          <div className="my-4 d-flex flex-column align-items-center">
+            <img src={qrCodeDataUrl} alt="QR Kod" style={{ width: 220, height: 220, borderRadius: 8, background: '#fff', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }} />
           </div>
-          <p className="text-muted mb-0">
+          <p className="text-muted mt-3" style={{ fontSize: '1.05rem' }}>
             Bu QR kodu tarayarak dijital kartvizite erişebilirsiniz.
           </p>
         </div>
