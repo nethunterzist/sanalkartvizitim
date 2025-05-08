@@ -1,96 +1,107 @@
-# Sanal Kartvizit - Next.js, Vercel ve Supabase
+# Sanal Kartvizit – Next.js, Vercel & Supabase
 
-## Önemli Mimari Değişiklikler (Mayıs 2024)
+## 🚀 Modern Serverless Mimari (Mayıs 2024)
 
-### Sunucusuz (Serverless) Uyumlu Yeni Mimari
-- **QR kod, HTML ve vCard (VCF) dosyaları artık dosya sistemine yazılmıyor.**
-- Tüm bu içerikler API route'larında anlık olarak response ile üretiliyor.
-- Vercel gibi sunucusuz ortamlarda dosya sistemine yazmak mümkün olmadığı için, eski `fs.writeFileSync`, `fs.mkdirSync` gibi işlemler tamamen kaldırıldı.
-- QR kodlar `toDataURL` ile base64 olarak response ile dönüyor.
-- vCard (VCF) dosyası endpointi, içeriği string olarak oluşturup response ile döndürüyor.
-- HTML şablonları da response ile anlık üretiliyor.
+### 🔥 Radikal Yenilikler & Mimari Dönüşüm
+- **Tüm dosya sistemi işlemleri (fs, path, mkdir, writeFile, vs.) projeden tamamen kaldırıldı.**
+- QR kod, vCard (VCF) ve HTML çıktıları artık dosya sistemine yazılmadan, API route'larında anlık olarak response ile üretiliyor.
+- Handlebars tabanlı HTML şablonları, dosya okuma olmadan koda gömülü string olarak derleniyor.
+- vCard ve QR kodlar, kullanıcıya doğrudan response ile sunuluyor.
+- Proje artık Vercel ve benzeri serverless ortamlarda %100 uyumlu ve sürdürülebilir.
 
-### Geliştiriciler İçin Notlar
-- **Dosya sistemine yazma gerektiren hiçbir kod bırakılmamalı.**
+### ⚠️ Geliştiriciler İçin Kritik Notlar
+- **Dosya sistemine yazma gerektiren hiçbir kod bırakılmamalı!**
 - Tüm dinamik içerikler (QR, vCard, HTML) sadece response ile üretilmeli.
 - Local geliştirme için dosya yazma işlemleri sadece scriptlerde kullanılabilir, production'da asla kullanılmaz.
-- Proje artık Vercel ve benzeri serverless ortamlarda uzun ömürlü ve sorunsuz çalışır.
+- Tüm statik görseller ve template'ler, public/img ve koda gömülü template string olarak yönetilmeli.
 
-### Değişiklik Özeti
-- `lib/qrCodeGenerator.ts`: Sadece `toDataURL` ile QR kod response üretimi.
-- `lib/vcardGenerator.ts`: vCard içeriği sadece string olarak oluşturuluyor, dosya sistemine yazılmıyor.
-- `app/api/sayfalar/[slug]/vcard/route.ts`: vCard response ile anlık üretiliyor.
-- `app/api/firmalar/route.ts` ve `[id]/route.ts`: vCard dosya yolu ve yazma işlemleri tamamen kaldırıldı.
+### 📦 Temel Dosya ve Klasör Yapısı
+- `app/lib/cardTemplate.ts`: Tüm HTML şablonu burada string olarak tutulur.
+- `public/img/`: Tüm ikonlar, arka plan ve görseller burada.
+- `app/[slug]/page.tsx`: Kartvizit sayfası, sadece API'dan veri çekip Handlebars ile HTML üretir.
+- `app/api/sayfalar/[slug]/route.ts`: Tüm kartvizit verisini JSON olarak döner.
+- `app/api/qr-codes/[slug]/route.ts`: QR kodu anlık olarak üretir ve HTML response döner.
 
 ---
 
 ## Kurulum ve Kullanım
-(Standart kurulum ve kullanım adımlarını buraya ekleyin...)
-
-## Özellikler
-
-- Firma bilgilerini yönetme (ekleme, düzenleme, silme)
-- Çoklu iletişim verileri desteği (telefon, e-posta, WhatsApp, Telegram)
-- Sosyal medya hesaplarını ekleme
-- vCard dosyaları ile rehbere kaydetme
-- QR kod oluşturma
-- Bank hesapları ve vergi bilgileri ekleme
-- Dijital kartvizitleri görüntüleme ve paylaşma
-- Responsive tasarım
-
-## Teknolojiler
-
-- Next.js 14
-- TypeScript
-- Prisma ORM
-- SQLite
-- Handlebars (şablon motoru)
-- Bootstrap
-- Font Awesome
-
-## Kurulum
 
 ```bash
-# Repoyu klonlayın
 git clone https://github.com/username/sanal-kartvizit.git
-
-# Proje dizinine gidin
 cd sanal-kartvizit
-
-# Bağımlılıkları yükleyin
 npm install
-
-# Geliştirme sunucusunu başlatın
 npm run dev
 ```
 
+### Ortam Değişkenleri
+- `DATABASE_URL`: Supabase/PostgreSQL bağlantı dizesi
+- `VERCEL_URL`: Vercel deployment domain'i (örn. sanalkartvizitim-xxxx.vercel.app)
+
+---
+
+## Özellikler
+
+- Firma yönetimi (ekle, düzenle, sil)
+- Çoklu iletişim ve sosyal medya desteği
+- vCard ile rehbere kaydetme
+- QR kod oluşturma ve paylaşma
+- Banka ve vergi bilgileri
+- Modern, responsive ve görsel açıdan zengin kartvizit tasarımı
+- Tüm işlemler serverless uyumlu
+
+---
+
+## Teknolojiler
+
+- Next.js 14 (App Router)
+- TypeScript
+- Prisma ORM & Supabase PostgreSQL
+- Handlebars (şablon motoru)
+- Bootstrap, Font Awesome
+
+---
+
 ## Son Geliştirmeler
 
-### Telegram Veri İşleme Düzeltmeleri (20.04.2025)
+### 7 Mayıs 2024 – Serverless Uyumlu Radikal Mimari Dönüşüm
+- Tüm dosya sistemi işlemleri kaldırıldı, kod tamamen serverless uyumlu hale getirildi.
+- HTML template dosya okuma kaldırıldı, şablon koda gömüldü.
+- Tüm API route'lar response ile anlık veri ve dosya üretir hale getirildi.
+- Tüm görseller ve ikonlar public/img altında merkezi olarak yönetiliyor.
 
-Telegram kullanıcı adlarının işlenmesi ve görüntülenmesiyle ilgili sorunlar giderildi:
+### 20 Nisan 2025 – Telegram Veri İşleme Düzeltmeleri
+- Telegram kullanıcı adlarının işlenmesi ve bağlantı formatı düzeltildi.
+- Null/undefined ve boş değer kontrolleri eklendi.
 
-- Telegram kullanıcı adlarında null/undefined değerlere karşı kontroller eklendi
-- `@` işareti ile başlayan kullanıcı adlarının doğru şekilde işlenmesi sağlandı
-- Boş değerlerin ve gereksiz boşlukların filtrelenmesi eklendi
-- HTML çıktısında Telegram bağlantıları artık doğru URL formatında (`https://t.me/username`) oluşturuluyor
+---
 
-Bu değişiklikler sayesinde, uygulama artık çoklu Telegram kullanıcı adlarını güvenli bir şekilde işleyebiliyor ve herhangi bir veri formatı hatası olmadan doğru bağlantıları oluşturabiliyor.
+## Önemli Notlar
 
-Detaylı bilgi için GELISTIRME_GUNLUGU.md dosyasını inceleyebilirsiniz.
+### Sosyal Medya ve İletişim Verilerinin Özelleştirilmesi
+- Panel üzerinden sosyal medya ve iletişim verileri için özelleştirilmiş label/text girebilirsiniz
+- Özelleştirilmiş label/text girilmediğinde otomatik olarak platform/tip adı kullanılır
+- Her bir sosyal medya ve iletişim öğesi bağımsız olarak değerlendirilir
+- Bir öğede özelleştirilmiş label/text girilse bile diğer öğeler etkilenmez
+- Tüm ikonlar ve veriler eksiksiz ve doğru şekilde görüntülenir
+
+---
 
 ## Katkıda Bulunma
 
 1. Projeyi fork edin
-2. Feature branch oluşturun (`git checkout -b feature/amazing-feature`)
-3. Değişikliklerinizi commit edin (`git commit -m 'Add some amazing feature'`)
-4. Branch'inize push edin (`git push origin feature/amazing-feature`)
+2. Feature branch oluşturun (`git checkout -b feature/ozellik`)
+3. Değişikliklerinizi commit edin (`git commit -m 'Özellik eklendi'`)
+4. Branch'inize push edin (`git push origin feature/ozellik`)
 5. Pull Request açın
+
+---
 
 ## Lisans
 
 MIT Lisansı altında dağıtılmaktadır. Detaylı bilgi için `LICENSE` dosyasını inceleyiniz.
 
+---
+
 ## Veritabanı
 
-Proje Supabase PostgreSQL veritabanı kullanmaktadır. Veritabanı entegrasyonu tamamlanmıştır.
+Proje Supabase PostgreSQL veritabanı kullanmaktadır. Tüm bağlantı ve migration işlemleri Prisma ile yönetilmektedir.
