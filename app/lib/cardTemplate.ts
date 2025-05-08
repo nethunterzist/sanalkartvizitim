@@ -262,6 +262,12 @@ export const cardTemplate = `
 
                 <div class="container">
                     <div class="row justify-content-center" id="icons-container">
+                        <div class="col-3 icon">
+                            <a href="/{{slug}}/qr" target="_blank" rel="noopener noreferrer" class="d-flex flex-column align-items-center text-decoration-none">
+                                <img src="/img/qrcode.png" alt="QR Kod">
+                                <span class="mt-1 text-center small icon-label">QR Kod</span>
+                            </a>
+                        </div>
                         {{#if social_media}}
                             {{#each social_media}}
                             <div class="col-3 icon">
