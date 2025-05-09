@@ -291,6 +291,8 @@ export async function POST(req: NextRequest) {
         katalogFileName = await uploadToCloudinary(katalog, 'firma_kataloglari');
       }
     }
+    console.log("Katalog formData'dan gelen:", katalog);
+    console.log("Katalog kaydedilecek değer:", katalogFileName);
 
     // Form'da social media alanları
     console.log("Social Media alanları işleniyor");
@@ -880,6 +882,8 @@ export async function PUT(req: NextRequest) {
         katalogFileName = await uploadToCloudinary(katalog, 'firma_kataloglari');
       }
     }
+    console.log("Katalog formData'dan gelen:", katalog);
+    console.log("Katalog kaydedilecek değer:", katalogFileName);
 
     // Form'da social media alanları
     console.log("Social Media alanları işleniyor");
