@@ -330,13 +330,8 @@ export async function POST(req: NextRequest) {
       data: {
         firma_adi: firmaAdi || "",
         slug: slug,
-        // Eski tekil alanlar yerine JSON verilerini kullan
-        // telefon: telefonlar.length > 0 ? telefonlar[0].value : null, 
-        // eposta: epostalar.length > 0 ? epostalar[0].value : null,
-        // whatsapp: whatsapplar.length > 0 ? whatsapplar[0].value : null,
-        // ... (diğer eski tekil alanlar kaldırıldı) ...
-        profil_foto: avatarFileName || null,
-        firma_logo: firmLogoFileName || null,
+        profil_foto: avatarFileName ? `/uploads/${avatarFileName}` : null,
+        firma_logo: firmLogoFileName ? `/uploads/${firmLogoFileName}` : null,
         katalog: katalogFileName || null,
         yetkili_adi: yetkili_adi,
         yetkili_pozisyon: yetkili_pozisyon,
@@ -953,8 +948,8 @@ export async function PUT(req: NextRequest) {
         eposta: epostalar.length > 0 ? epostalar[0].value : null,
         whatsapp: whatsapplar.length > 0 ? whatsapplar[0].value : null,
         telegram: telegramlar.length > 0 ? telegramlar[0].value : null,
-        profil_foto: avatarFileName,
-        firma_logo: firmLogoFileName || null,
+        profil_foto: avatarFileName ? `/uploads/${avatarFileName}` : null,
+        firma_logo: firmLogoFileName ? `/uploads/${firmLogoFileName}` : null,
         katalog: katalogFileName,
         yetkili_adi: yetkiliAdi || null,
         yetkili_pozisyon: yetkiliPozisyon || null,
