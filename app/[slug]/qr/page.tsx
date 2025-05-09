@@ -61,17 +61,23 @@ export default async function QRPage({ params }: { params: { slug: string } }) {
     const qrData = `${baseUrl}/${decodedSlug}`;
     const qrCodeDataUrl = await QRCode.toDataURL(qrData, { width: 300 });
 
-    // Web sitesi (varsa) dizi olarak hazırla
+    // Web sitesi (varsa) dizi veya string olarak hazırla
     let website = '';
     if (firma.website) {
-      if (typeof firma.website === 'string' && firma.website.startsWith('[')) {
+      if (Array.isArray(firma.website)) {
+        if (firma.website.length > 0) {
+          website = firma.website[0];
+        }
+      } else if (typeof firma.website === 'string' && firma.website.startsWith('[')) {
         try {
           const arr = JSON.parse(firma.website);
-          website = arr[0] || '';
+          if (Array.isArray(arr) && arr.length > 0) {
+            website = arr[0];
+          }
         } catch {
           website = firma.website;
         }
-      } else {
+      } else if (typeof firma.website === 'string') {
         website = firma.website;
       }
     }
