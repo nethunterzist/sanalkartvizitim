@@ -664,7 +664,7 @@ async function uploadToCloudinary(file: File, folder: string): Promise<string | 
     const buffer = Buffer.from(arrayBuffer);
     const uploadResult = await new Promise<any>((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
-        { folder },
+        { folder, resource_type: 'raw' }, // PDF ve diğer binary dosyalar için raw
         (error: any, result: any) => {
           if (error) return reject(error);
           resolve(result);
