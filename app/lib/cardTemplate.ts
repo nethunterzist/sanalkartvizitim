@@ -250,6 +250,7 @@ export const cardTemplate = `
                             {{#if yetkili_pozisyon}}
                             <p style="font-size: 1rem; color: #666;">{{yetkili_pozisyon}}</p>
                             {{/if}}
+                            {{{rehbereEkleButonu}}}
                         </div>
                     </div>
                 </div>
