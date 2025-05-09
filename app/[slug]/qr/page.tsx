@@ -83,9 +83,9 @@ export default async function QRPage({ params }: { params: { slug: string } }) {
     }
 
     return (
-      <div className="main-container" style={{ maxWidth: 450, margin: '0 auto', minHeight: '100vh', background: 'white', boxShadow: '0 0 15px rgba(0,0,0,0.1)', position: 'relative' }}>
-        <div className="background" style={{ background: `url('/img/back.jpeg') no-repeat center center`, backgroundSize: 'cover', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-          <div className="card-content" style={{ textAlign: 'center', width: '90%', maxWidth: 400, margin: '0 auto', padding: '32px 0' }}>
+      <div className="main-container" style={{ maxWidth: 450, margin: '0 auto', minHeight: '100vh', background: 'white', boxShadow: '0 0 15px rgba(0,0,0,0.1)', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="background" style={{ background: `url('/img/back.jpeg') no-repeat center center`, backgroundSize: 'cover', minHeight: '100vh', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <div className="card-content" style={{ textAlign: 'center', width: '90%', maxWidth: 400, margin: '0 auto', padding: '32px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <div className="container">
               <div className="row justify-content-center mb-2">
                 <div className="col-12 text-center">
@@ -96,12 +96,12 @@ export default async function QRPage({ params }: { params: { slug: string } }) {
                 </div>
               </div>
             </div>
-            <div className="my-4 d-flex flex-column align-items-center">
-              <img src={qrCodeDataUrl} alt="QR Kod" style={{ width: 220, height: 220, borderRadius: 8, background: '#fff', boxShadow: '0 2px 12px rgba(0,0,0,0.08)' }} />
+            <div className="my-4 d-flex flex-column align-items-center justify-content-center" style={{ width: '100%' }}>
+              <img src={qrCodeDataUrl} alt="QR Kod" style={{ width: 220, height: 220, borderRadius: 8, background: '#fff', boxShadow: '0 2px 12px rgba(0,0,0,0.08)', margin: '0 auto' }} />
             </div>
             {website && (
-              <div className="mb-3">
-                <a href={website} target="_blank" rel="noopener noreferrer" style={{ fontSize: '1.08rem', color: '#007bff', textDecoration: 'underline', wordBreak: 'break-all' }}>{website.replace(/^https?:\/\//, '')}</a>
+              <div className="mb-3" style={{ width: '100%' }}>
+                <a href={website} target="_blank" rel="noopener noreferrer" style={{ fontSize: '1.08rem', color: '#007bff', textDecoration: 'underline', wordBreak: 'break-all', display: 'block', textAlign: 'center' }}>{website.replace(/^https?:\/\//, '')}</a>
               </div>
             )}
             {firma.firma_logo && (
