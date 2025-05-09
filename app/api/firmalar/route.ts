@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { generateVCard } from '@/app/lib/vcardGenerator';
 import { generateQRCodeDataUrl } from '@/lib/qrCodeGenerator';
+import cloudinary from '@/lib/cloudinary';
 
 // Sosyal medya veri yapısı
 interface SocialMediaData {
@@ -270,22 +271,22 @@ export async function POST(req: NextRequest) {
     // Profil fotoğrafı yükleme
     const profilePhoto = formData.get('profilePhoto') as File;
     if (profilePhoto && profilePhoto.size > 0) {
-      avatarFileName = await handleFileUpload(profilePhoto, slug);
-      console.log("Profile photo uploaded:", avatarFileName);
+      avatarFileName = await uploadToCloudinary(profilePhoto, 'profil_fotograflari');
+      console.log("Profile photo Cloudinary'e yüklendi:", avatarFileName);
     }
 
     // Firma logosu yükleme
     const logoFile = formData.get('logoFile') as File;
     if (logoFile && logoFile.size > 0) {
-      firmLogoFileName = await handleFileUpload(logoFile, slug);
-      console.log("Firma logosu uploaded:", firmLogoFileName);
+      firmLogoFileName = await uploadToCloudinary(logoFile, 'firma_logolari');
+      console.log("Firma logosu Cloudinary'e yüklendi:", firmLogoFileName);
     }
 
     // Katalog yükleme
     const catalog = formData.get('catalog') as File;
     if (catalog && catalog.size > 0) {
-      katalogFileName = await handleFileUpload(catalog, slug);
-      console.log("Catalog uploaded:", katalogFileName);
+      katalogFileName = await uploadToCloudinary(catalog, 'firma_kataloglari');
+      console.log("Catalog Cloudinary'e yüklendi:", katalogFileName);
     }
 
     // Form'da social media alanları
@@ -330,8 +331,8 @@ export async function POST(req: NextRequest) {
       data: {
         firma_adi: firmaAdi || "",
         slug: slug,
-        profil_foto: avatarFileName ? `/uploads/${avatarFileName}` : null,
-        firma_logo: firmLogoFileName ? `/uploads/${firmLogoFileName}` : null,
+        profil_foto: avatarFileName ? avatarFileName : null,
+        firma_logo: firmLogoFileName ? firmLogoFileName : null,
         katalog: katalogFileName || null,
         yetkili_adi: yetkili_adi,
         yetkili_pozisyon: yetkili_pozisyon,
@@ -652,27 +653,23 @@ async function processSocialMediaAccounts(formData: FormData, sosyalMedyaHesapla
   };
 }
 
-async function handleFileUpload(file: File, slug: string): Promise<string | null> {
+async function uploadToCloudinary(file: File, folder: string): Promise<string | null> {
   try {
-    // Upload dizini oluştur
-    const uploadDir = path.join(process.cwd(), 'public/uploads');
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    
-    // Benzersiz dosya adı oluştur
-    const extension = path.extname(file.name);
-    const fileName = `${slug}-${Date.now()}${extension}`;
-    const filePath = path.join(uploadDir, fileName);
-    
-    // Dosyayı kaydet
-    const buffer = Buffer.from(await file.arrayBuffer());
-    fs.writeFileSync(filePath, buffer);
-    
-    // Dosya URL'si (web'den erişim için)
-    return `/uploads/${fileName}`;
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const uploadResult = await new Promise<any>((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder },
+        (error: any, result: any) => {
+          if (error) return reject(error);
+          resolve(result);
+        }
+      );
+      stream.end(buffer);
+    });
+    return uploadResult.secure_url;
   } catch (error) {
-    console.error('Dosya yükleme hatası:', error);
+    console.error('Cloudinary yükleme hatası:', error);
     return null;
   }
 }
@@ -860,22 +857,22 @@ export async function PUT(req: NextRequest) {
     // Profil fotoğrafı yükleme
     const profilePhoto = formData.get('profilePhoto') as File;
     if (profilePhoto && profilePhoto.size > 0) {
-      avatarFileName = await handleFileUpload(profilePhoto, slug);
-      console.log("Profile photo uploaded:", avatarFileName);
+      avatarFileName = await uploadToCloudinary(profilePhoto, 'profil_fotograflari');
+      console.log("Profile photo Cloudinary'e yüklendi:", avatarFileName);
     }
 
     // Firma logosu yükleme
     const logoFile = formData.get('logoFile') as File;
     if (logoFile && logoFile.size > 0) {
-      firmLogoFileName = await handleFileUpload(logoFile, slug);
-      console.log("Firma logosu uploaded:", firmLogoFileName);
+      firmLogoFileName = await uploadToCloudinary(logoFile, 'firma_logolari');
+      console.log("Firma logosu Cloudinary'e yüklendi:", firmLogoFileName);
     }
 
     // Katalog yükleme
     const catalog = formData.get('catalog') as File;
     if (catalog && catalog.size > 0) {
-      katalogFileName = await handleFileUpload(catalog, slug);
-      console.log("Catalog uploaded:", katalogFileName);
+      katalogFileName = await uploadToCloudinary(catalog, 'firma_kataloglari');
+      console.log("Catalog Cloudinary'e yüklendi:", katalogFileName);
     }
 
     // Form'da social media alanları
@@ -948,8 +945,8 @@ export async function PUT(req: NextRequest) {
         eposta: epostalar.length > 0 ? epostalar[0].value : null,
         whatsapp: whatsapplar.length > 0 ? whatsapplar[0].value : null,
         telegram: telegramlar.length > 0 ? telegramlar[0].value : null,
-        profil_foto: avatarFileName ? `/uploads/${avatarFileName}` : null,
-        firma_logo: firmLogoFileName ? `/uploads/${firmLogoFileName}` : null,
+        profil_foto: avatarFileName ? avatarFileName : null,
+        firma_logo: firmLogoFileName ? firmLogoFileName : null,
         katalog: katalogFileName,
         yetkili_adi: yetkiliAdi || null,
         yetkili_pozisyon: yetkiliPozisyon || null,
