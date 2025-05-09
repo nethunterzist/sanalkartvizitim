@@ -108,7 +108,7 @@ export default async function QRPage({ params }: { params: { slug: string } }) {
             </div>
             {website && (
               <div className="mb-3" style={{ width: '100%' }}>
-                <a href={website} target="_blank" rel="noopener noreferrer" style={{ fontSize: '1.08rem', color: '#007bff', textDecoration: 'underline', wordBreak: 'break-all', display: 'block', textAlign: 'center' }}>{website.replace(/^https?:\/\//, '')}</a>
+                <a href={website} target="_blank" rel="noopener noreferrer" style={{ fontSize: '1.08rem', color: '#F5B301', textDecoration: 'none', wordBreak: 'break-all', display: 'block', textAlign: 'center', fontWeight: 500 }}>{website.replace(/^https?:\/\//, '')}</a>
               </div>
             )}
             {firma.firma_logo && (
