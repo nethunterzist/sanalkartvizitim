@@ -85,7 +85,18 @@ export default async function KartvizitPage({ params }: { params: { slug: string
         const compiledTemplate = handlebars.compile(cardTemplate);
         
         // Template'i veri ile doldur
-        const html = compiledTemplate(data);
+        const html = compiledTemplate({
+            ...data,
+            rehbereEkleButonu: data && `
+                <div style="display: flex; flex-direction: column; align-items: center; margin-top: 8px;">
+                    ${data.yetkili_pozisyon ? `<div style="font-size: 1.05em; color: #888; margin-bottom: 8px;">${data.yetkili_pozisyon}</div>` : ''}
+                    <a href="/${data.slug}/${data.slug}.vcf" download="${data.firma_adi}.vcf" style="display: flex; align-items: center; gap: 6px; background: #f5f5f5; border-radius: 8px; padding: 6px 14px; font-size: 15px; color: #222; text-decoration: none; box-shadow: 0 1px 4px #0001; margin-top: 2px;">
+                        <img src="/img/rehber.png" alt="Rehbere Ekle" style="width: 22px; height: 22px;" />
+                        <span>Rehbere Ekle</span>
+                    </a>
+                </div>
+            `
+        });
         
         // HTML'i döndür
         return (
@@ -96,22 +107,3 @@ export default async function KartvizitPage({ params }: { params: { slug: string
         return notFound();
     }
 }
-
-// Pozisyonun hemen altına ekle:
-{data && (
-  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 8 }}>
-    {/* Pozisyon */}
-    {data.yetkili_pozisyon && (
-      <div style={{ fontSize: '1.05em', color: '#888', marginBottom: 8 }}>{data.yetkili_pozisyon}</div>
-    )}
-    {/* Rehbere Ekle butonu */}
-    <a
-      href={`/${data.slug}/${data.slug}.vcf`}
-      download={`${data.firma_adi}.vcf`}
-      style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#f5f5f5', borderRadius: 8, padding: '6px 14px', fontSize: 15, color: '#222', textDecoration: 'none', boxShadow: '0 1px 4px #0001', marginTop: 2 }}
-    >
-      <img src="/img/rehber.png" alt="Rehbere Ekle" style={{ width: 22, height: 22 }} />
-      <span>Rehbere Ekle</span>
-    </a>
-  </div>
-)}
