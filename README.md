@@ -73,6 +73,13 @@ npm run dev
 - Telegram kullanıcı adlarının işlenmesi ve bağlantı formatı düzeltildi.
 - Null/undefined ve boş değer kontrolleri eklendi.
 
+### 2025-05-09
+- Cloudinary dosya yükleme entegrasyonu tamamlandı.
+- Local dosya sistemi ve eski upload kodları temizlendi.
+- Ortam değişkenleri Vercel paneline eklendi ve test edildi.
+- Tüm dosya yüklemeleri sorunsuz şekilde Cloudinary üzerinden çalışıyor.
+- API ve frontend entegrasyonu başarıyla test edildi.
+
 ---
 
 ## Önemli Notlar
@@ -105,3 +112,25 @@ MIT Lisansı altında dağıtılmaktadır. Detaylı bilgi için `LICENSE` dosyas
 ## Veritabanı
 
 Proje Supabase PostgreSQL veritabanı kullanmaktadır. Tüm bağlantı ve migration işlemleri Prisma ile yönetilmektedir.
+
+## Cloudinary Dosya Yükleme Entegrasyonu
+
+Bu projede, profil fotoğrafı, firma logosu ve katalog dosyalarının yüklenmesi için Cloudinary bulut servisi kullanılmaktadır. Vercel gibi sunucularda dosya sistemine yazma kısıtlaması olduğu için, tüm dosya yüklemeleri doğrudan Cloudinary'ye yapılır ve dönen URL veritabanında saklanır.
+
+### Kurulum ve Ortam Değişkenleri
+Aşağıdaki ortam değişkenlerini hem localde `.env.local` dosyanıza hem de Vercel panelinde **Environment Variables** bölümüne ekleyin:
+
+```
+CLOUDINARY_CLOUD_NAME=dmjdeij1f
+CLOUDINARY_API_KEY=746137369292131
+CLOUDINARY_API_SECRET=CKFK5grKj6cdfISd_Te6ea5yFj8
+```
+
+### Kullanım
+- Frontend'de dosya seçimi FormData ile API'ya gönderilir.
+- Backend'de dosya Cloudinary'ye yüklenir ve dönen `secure_url` veritabanına kaydedilir.
+- Artık public/uploads veya local dosya sistemi kullanılmaz.
+
+### Önemli Notlar
+- Ortam değişkenleri eksiksiz ve doğru tanımlanmazsa yükleme çalışmaz.
+- Vercel'de değişiklik sonrası yeni deploy başlatılmalıdır.

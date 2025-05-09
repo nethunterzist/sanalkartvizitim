@@ -91,6 +91,21 @@ interface CommunicationAccount {
   label?: string; // Özel başlık için yeni alan eklendi
 }
 
+// Cloudinary'ye PDF yükleme fonksiyonu
+async function uploadPdfToCloudinary(file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', 'pdf_unsigned'); // Cloudinary panelinden preset adını gir
+
+  const res = await fetch('https://api.cloudinary.com/v1_1/dmjdeij1f/auto/upload', {
+    method: 'POST',
+    body: formData,
+  });
+  if (!res.ok) throw new Error('PDF yükleme başarısız');
+  const data = await res.json();
+  return data.secure_url;
+}
+
 export default function YeniFirmaPage() {
   const router = useRouter();
 
@@ -486,11 +501,12 @@ export default function YeniFirmaPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     setError(null);
     setSuccess(null);
-    setLoading(true);
-    
+
     try {
+      const formData = new FormData();
       if (!firmaAdi || !slug) {
         throw new Error('Firma adı ve URL zorunludur');
       }
@@ -506,7 +522,6 @@ export default function YeniFirmaPage() {
       );
 
       // Form verilerini oluştur
-      const formData = new FormData();
       formData.append("firmaAdi", firmaAdi);
       formData.append("slug", slug);
       formData.append("firma_hakkinda", firmaHakkinda);
@@ -557,8 +572,9 @@ export default function YeniFirmaPage() {
       }
       
       if (katalogDosya) {
-        console.log('Katalog dosyası ekleniyor:', katalogDosya.name, katalogDosya.size, katalogDosya.type);
-        formData.append('catalog', katalogDosya);
+        // Önce Cloudinary'ye yükle
+        const katalogUrl = await uploadPdfToCloudinary(katalogDosya);
+        formData.append('katalog', katalogUrl);
       }
       
       if (yetkiliAdi) {

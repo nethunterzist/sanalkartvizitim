@@ -14,7 +14,12 @@ const qrTemplate = `
 </head>
 <body>
   <h1>{{firma_adi}}</h1>
-  <p>{{yetkili_adi}} - {{yetkili_pozisyon}}</p>
+  <div style="margin-bottom: 12px;">
+    <div style="font-size: 1.1em; font-weight: 500;">{{yetkili_adi}}</div>
+    {{#if yetkili_pozisyon}}
+      <div style="font-size: 0.95em; color: #666; margin-top: 2px;">{{yetkili_pozisyon}}</div>
+    {{/if}}
+  </div>
   <img src="{{qr_code_data_url}}" alt="QR Kod" />
   {{#if website}}
     <ul>
