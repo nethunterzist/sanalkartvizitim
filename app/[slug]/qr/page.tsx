@@ -81,6 +81,13 @@ export default async function QRPage({ params }: { params: { slug: string } }) {
         website = firma.website;
       }
     }
+    // Eğer website hala boşsa, communication dizisinde label'ı Website olan ilk değeri al
+    if (!website && Array.isArray(firma.communication)) {
+      const commWeb = firma.communication.find((c: any) => c.label === 'Website' && c.value);
+      if (commWeb) {
+        website = commWeb.value;
+      }
+    }
 
     return (
       <div className="main-container" style={{ maxWidth: 450, margin: '0 auto', minHeight: '100vh', background: 'white', boxShadow: '0 0 15px rgba(0,0,0,0.1)', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
