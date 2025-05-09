@@ -2,13 +2,22 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import QRCode from 'qrcode';
 
+// URL'deki encode edilmiş karakterleri decode eden yardımcı fonksiyon
+function decodeSlug(slug: string): string {
+  try {
+    return decodeURIComponent(slug);
+  } catch {
+    return slug;
+  }
+}
+
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const { slug } = params;
+  const decodedSlug = decodeSlug(params.slug);
   try {
     const baseUrl = process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}`
       : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const apiUrl = `${baseUrl}/api/sayfalar/${slug}`;
+    const apiUrl = `${baseUrl}/api/sayfalar/${decodedSlug}`;
     const response = await fetch(apiUrl, { 
       cache: 'no-store', 
       headers: { 'Accept': 'application/json' } 
@@ -33,12 +42,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function QRPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+  const decodedSlug = decodeSlug(params.slug);
   try {
     const baseUrl = process.env.VERCEL_URL 
       ? `https://${process.env.VERCEL_URL}`
       : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const apiUrl = `${baseUrl}/api/sayfalar/${slug}`;
+    const apiUrl = `${baseUrl}/api/sayfalar/${decodedSlug}`;
     const response = await fetch(apiUrl, { 
       cache: 'no-store', 
       headers: { 'Accept': 'application/json' } 
@@ -49,7 +58,7 @@ export default async function QRPage({ params }: { params: { slug: string } }) {
     const firma = await response.json();
 
     // QR kodunu oluştur
-    const qrData = `${baseUrl}/${slug}`;
+    const qrData = `${baseUrl}/${decodedSlug}`;
     const qrCodeDataUrl = await QRCode.toDataURL(qrData, { width: 300 });
 
     // Web sitesi (varsa) dizi olarak hazırla
