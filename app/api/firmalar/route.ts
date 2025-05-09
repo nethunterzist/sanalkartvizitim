@@ -282,11 +282,14 @@ export async function POST(req: NextRequest) {
       console.log("Firma logosu Cloudinary'e yüklendi:", firmLogoFileName);
     }
 
-    // Katalog yükleme
-    const catalog = formData.get('catalog') as File;
-    if (catalog && catalog.size > 0) {
-      katalogFileName = await uploadToCloudinary(catalog, 'firma_kataloglari');
-      console.log("Catalog Cloudinary'e yüklendi:", katalogFileName);
+    // Katalog yükleme (POST ve PUT için ortak mantık)
+    const katalog = formData.get('katalog') as File | string;
+    if (katalog) {
+      if (typeof katalog === 'string') {
+        katalogFileName = katalog;
+      } else if (katalog.size > 0) {
+        katalogFileName = await uploadToCloudinary(katalog, 'firma_kataloglari');
+      }
     }
 
     // Form'da social media alanları
@@ -868,11 +871,14 @@ export async function PUT(req: NextRequest) {
       console.log("Firma logosu Cloudinary'e yüklendi:", firmLogoFileName);
     }
 
-    // Katalog yükleme
-    const catalog = formData.get('catalog') as File;
-    if (catalog && catalog.size > 0) {
-      katalogFileName = await uploadToCloudinary(catalog, 'firma_kataloglari');
-      console.log("Catalog Cloudinary'e yüklendi:", katalogFileName);
+    // Katalog yükleme (POST ve PUT için ortak mantık)
+    const katalog = formData.get('katalog') as File | string;
+    if (katalog) {
+      if (typeof katalog === 'string') {
+        katalogFileName = katalog;
+      } else if (katalog.size > 0) {
+        katalogFileName = await uploadToCloudinary(katalog, 'firma_kataloglari');
+      }
     }
 
     // Form'da social media alanları
@@ -947,7 +953,7 @@ export async function PUT(req: NextRequest) {
         telegram: telegramlar.length > 0 ? telegramlar[0].value : null,
         profil_foto: avatarFileName ? avatarFileName : null,
         firma_logo: firmLogoFileName ? firmLogoFileName : null,
-        katalog: katalogFileName,
+        katalog: katalogFileName || null,
         yetkili_adi: yetkiliAdi || null,
         yetkili_pozisyon: yetkiliPozisyon || null,
         firma_hakkinda: firma_hakkinda || null,
