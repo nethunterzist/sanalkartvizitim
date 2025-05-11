@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "./components/AuthProvider";
 import './lib/initDb';
-
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Sanal Kartvizit Sistemi",
@@ -26,7 +20,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Sanal Kartvizit Sistemi" />
       </head>
-      <body className={inter.className}>
+      <body>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

@@ -1,6 +1,0 @@
-BEGIN:VCARD
-VERSION:3.0
-FN:telefon test
-TEL;TYPE=WORK,VOICE,pref=1:yarrak
-EMAIL;TYPE=WORK,pref=1:aaaaa
-END:VCARD
