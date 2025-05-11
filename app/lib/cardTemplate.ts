@@ -251,8 +251,9 @@ export const cardTemplate = `
                             <p style="font-size: 1rem; color: #666;">{{yetkili_pozisyon}}</p>
                             {{/if}}
                             <div style="display: flex; flex-direction: column; align-items: center; margin-top: 8px;">
-                                <a href="/{{slug}}/{{slug}}.vcf" download="{{firma_adi}}.vcf" style="display: flex; align-items: center; justify-content: center; background: #f5f5f5; border-radius: 8px; padding: 6px 14px; font-size: 15px; color: #222; text-decoration: none; box-shadow: 0 1px 4px #0001; margin-top: 2px;">
-                                    <img src="/img/rehber.png" alt="Rehbere Ekle" style="width: 28px; height: 28px;" />
+                                <a href="/{{slug}}/{{slug}}.vcf" download="{{firma_adi}}.vcf" style="display: flex; align-items: center; gap: 6px; background: none; border-radius: 0; padding: 0; font-size: 15px; color: #222; text-decoration: none; box-shadow: none; margin-top: 2px;">
+                                    <img src="/img/rehber.png" alt="Rehbere Ekle" style="width: 28px; height: 28px; margin: 0; padding: 0; background: none; border: none; box-shadow: none;" />
+                                    <span>Rehbere Ekle</span>
                                 </a>
                             </div>
                         </div>
