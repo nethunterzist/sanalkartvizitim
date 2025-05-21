@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['localhost'],
+    domains: ['localhost', 'furkanyigit.com'],
   },
   // SWC derleyici sorununu çözmek için
   swcMinify: false,
