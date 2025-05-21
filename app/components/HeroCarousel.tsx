@@ -2,12 +2,12 @@
 import React, { useRef, useEffect } from "react";
 
 const images = [
-  "https://mobbin.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Flogin.991fa6c8.png&w=1920&q=75",
-  "https://mobbin.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fprofile.d7334f53.png&w=1920&q=75",
-  "https://mobbin.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Faccount-setup.2b6b3e99.png&w=1920&q=75",
-  "https://mobbin.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fcheckout.ba9e44a5.png&w=1920&q=75",
-  "https://mobbin.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fsubscription-paywall.e3ad5de9.png&w=1920&q=75",
-  "https://mobbin.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fsettings.9d0ddd46.png&w=1920&q=75"
+  "https://furkanyigit.com/sanal/1.jpg",
+  "https://furkanyigit.com/sanal/2.jpg",
+  "https://furkanyigit.com/sanal/3.jpg",
+  "https://furkanyigit.com/sanal/4.jpg",
+  "https://furkanyigit.com/sanal/5.jpg",
+  "https://furkanyigit.com/sanal/6.jpg"
 ];
 const allImages = Array.from({ length: 20 }, (_, i) => images[i % images.length]);
 

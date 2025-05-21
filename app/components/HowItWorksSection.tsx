@@ -46,7 +46,7 @@ export default function HowItWorksSection() {
         </div>
         {/* Telefon görseli */}
         <div className="flex-shrink-0 mx-8 my-12 md:my-0">
-          <img src="https://sandbox-tailwind-nextjs.netlify.app/assets/img/photos/devices4.png" alt="App Phone" className="w-[320px] md:w-[380px] h-auto drop-shadow-xl" />
+          <img src="https://furkanyigit.com/sanal/7.png" alt="App Phone" className="w-[320px] md:w-[380px] h-auto drop-shadow-xl" />
         </div>
         {/* Sağ kutular */}
         <div className="flex flex-col gap-16 items-start flex-1">

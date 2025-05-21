@@ -20,8 +20,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3">
         <Link href="/">
           <span className="flex items-center gap-2 font-bold text-xl text-blue-900">
-            <Image src="/img/logo.svg" alt="Logo" width={36} height={36} className="rounded-full" />
-            Sanal Kartvizit
+            <Image src="https://furkanyigit.com/sanal/logo.png" alt="Logo" width={120} height={120} className="rounded-full" />
           </span>
         </Link>
         <div className="hidden md:flex gap-2 items-center">

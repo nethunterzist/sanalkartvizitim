@@ -30,7 +30,7 @@ export default function VideoFaqSection() {
             poster="/img/video-poster.jpg"
             className="w-full h-[340px] object-cover pointer-events-none select-none"
           >
-            <source src="https://video-previews.elements.envatousercontent.com/00939f1f-ffb1-46d0-ac53-7b11dc3b6f1a/watermarked_preview/watermarked_preview.mp4" type="video/mp4" />
+            <source src="https://furkanyigit.com/sanal/video5_.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>

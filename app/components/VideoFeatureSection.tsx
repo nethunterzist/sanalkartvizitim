@@ -3,22 +3,22 @@ import { FaPlay } from "react-icons/fa";
 
 const videoData = [
   {
-    src: "https://bytescale.mobbin.com/FW25bBB/video/assets/videos/lp_flow_video_demo_v1.mp4?mute=true&f=mp4-h264&a=%2Fvideo.mp4&w=500&sh=90&q=6",
+    src: "https://furkanyigit.com/sanal/video1.mp4",
     title: "Dijital Kartvizit Oluştur",
     desc: "Kendi dijital kartvizitini saniyeler içinde oluştur, kişisel ve kurumsal bilgilerini ekle."
   },
   {
-    src: "https://bytescale.mobbin.com/FW25bBB/video/assets/videos/lp_prototype_demo_v1.mp4?mute=true&f=mp4-h264&a=%2Fvideo.mp4&w=500&sh=90&q=6",
+    src: "https://furkanyigit.com/sanal/video2.mp4",
     title: "Tüm Sosyal Medya ve İletişim Bilgileri",
     desc: "Instagram, X, LinkedIn, WhatsApp ve tüm iletişim kanallarını tek bir kartta topla."
   },
   {
-    src: "https://bytescale.mobbin.com/FW25bBB/video/assets/videos/lp_flow_video_demo_v1.mp4?mute=true&f=mp4-h264&a=%2Fvideo.mp4&w=500&sh=90&q=6",
+    src: "https://furkanyigit.com/sanal/video3.mp4",
     title: "QR Kod ile Kolay Paylaşım",
     desc: "Kartvizitini QR kod veya kısa link ile anında paylaş, hızlıca rehbere eklet."
   },
   {
-    src: "https://bytescale.mobbin.com/FW25bBB/video/assets/videos/lp_prototype_demo_v1.mp4?mute=true&f=mp4-h264&a=%2Fvideo.mp4&w=500&sh=90&q=6",
+    src: "https://furkanyigit.com/sanal/video4.mp4",
     title: "Dosya ve Katalog Yükleme",
     desc: "Firma logonu, profil fotoğrafını ve PDF kataloglarını güvenle yükle, her yerden eriş."
   }
