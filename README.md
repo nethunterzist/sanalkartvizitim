@@ -134,3 +134,6 @@ CLOUDINARY_API_SECRET=CKFK5grKj6cdfISd_Te6ea5yFj8
 ### Önemli Notlar
 - Ortam değişkenleri eksiksiz ve doğru tanımlanmazsa yükleme çalışmaz.
 - Vercel'de değişiklik sonrası yeni deploy başlatılmalıdır.
+
+---
+Test: Vercel deploy tetikleme denemesi.
